@@ -1,0 +1,24 @@
+language: generic
+
+stages:
+  - test
+  - build
+  #- deploy
+
+jobs:
+  include:
+    - stage: test
+      name: "Unit Tests"
+      language: php
+      php:
+        - 7.4
+      script:
+        - composer install --optimize-autoloader
+        - composer test
+        - php travis/coverage-checker.php build/logs/clover.xml 80
+    - stage: build
+      name: "Build"
+      language: generic
+      before_install:
+        - docker build .
+    # Deploy stage...
