@@ -1,0 +1,65 @@
+{
+  "id": "bbe95a6c-b775-49f2-8fd4-c7d48db0de71",
+  "lastUpdateHash": "f247735d-3df9-4d19-8b7d-899c50dfa83c",
+  "family": "basic",
+  "status": "play",
+  "players": [
+    {
+      "id": "c4c663a0-8405-4db2-8971-2fc133d36598",
+      "name": "John",
+      "marker": false,
+      "tiles": {
+        "count": 5
+      }
+    }, {
+      "id": "8f9c4b7d-77e6-4332-ba96-3d5853a99f84",
+      "name": "Bob",
+      "marker": true,
+      "tiles": {
+        "count": 6,
+        "list": [
+          "1:4", "3:3", "2:6", "3:5", "0:2", "5:5"
+        ]
+      }
+    }
+  ],
+  "stock": {
+    "tiles": {
+      "count": 16
+    }
+  },
+  "events": [
+    {
+      "type": "play",
+      "createdAt": "2020-00-01T10:19:37+00:00",
+      "data": {
+        "tile": "2:2"
+      },
+      "player": {
+        "id": "c4c663a0-8405-4db2-8971-2fc133d36598"
+      }
+    }, {
+      "type": "play",
+      "createdAt": "2020-00-01T10:19:43+00:00",
+      "data": {
+        "tile": "2:5",
+        "position": "left",
+        "parent": "2:2"
+      },
+      "player": {
+        "id": "8f9c4b7d-77e6-4332-ba96-3d5853a99f84"
+      }
+    }, {
+      "type": "play",
+      "createdAt": "2020-00-01T10:20:15+00:00",
+      "data": {
+        "tile": "1:5",
+        "position": "left",
+        "parent": "2:5"
+      },
+      "player": {
+        "id": "c4c663a0-8405-4db2-8971-2fc133d36598"
+      }
+    }
+  ]
+}
