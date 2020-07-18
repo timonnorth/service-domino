@@ -43,18 +43,22 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     /**
      * Test errors.
      */
-    public function testException()
+    public function testEncodeException()
     {
-        $encoder = new Json();
-
         $recurs         = new \stdClass();
         $recurs->inside = $recurs;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Can not encode JSON");
-        $encoder->encode($recurs);
+        (new Json())->encode($recurs);
+    }
 
+    /**
+     * Test errors.
+     */
+    public function testDecodeException()
+    {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Can not decode JSON");
-        $encoder->decode("tiesto");
+        (new Json())->decode("tiesto");
     }
 }
