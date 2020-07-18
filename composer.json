@@ -16,7 +16,8 @@
         }
     ],
     "require": {
-        "php" : "~7.2"
+        "php" : "~7.2",
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit" : "^9.0",
@@ -24,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Oitimon\\Domino\\": "src"
+            "": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Oitimon\\Domino\\": "tests"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {

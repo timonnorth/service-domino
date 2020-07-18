@@ -1,3 +1,7 @@
 
 build/
 vendor/
+docker-compose.override.yml
+psr12.sh
+test.sh
+update.sh
