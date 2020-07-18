@@ -20,6 +20,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "mollie/php-coding-standards": "^1.2",
         "phpunit/phpunit" : "^9.0",
         "squizlabs/php_codesniffer": "^3.5"
     },
