@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Entity\Match;
+namespace Entity;
 
 class Match
 {
