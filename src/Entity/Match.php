@@ -6,8 +6,6 @@ namespace Entity\Match;
 
 class Match
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $id;
 }

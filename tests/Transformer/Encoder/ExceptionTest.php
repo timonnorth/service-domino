@@ -13,7 +13,7 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAutoMessage()
     {
-        $this->assertEquals('Can not encode/decode JSON', (new Exception())->getMessage());
+        self::assertEquals('Can not encode/decode JSON', (new Exception())->getMessage());
     }
 
     /**
@@ -21,6 +21,6 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testManualMessage()
     {
-        $this->assertEquals('Tiesto', (new Exception('Tiesto'))->getMessage());
+        self::assertEquals('Tiesto', (new Exception('Tiesto'))->getMessage());
     }
 }
