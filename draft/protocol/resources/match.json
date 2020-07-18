@@ -33,11 +33,11 @@
       "type": "play",
       "createdAt": "2020-00-01T10:19:37+00:00",
       "data": {
-        "tile": "2:2"
+        "tile": "2:2",
+        "position": "root",
+        "parent": null
       },
-      "player": {
-        "id": "c4c663a0-8405-4db2-8971-2fc133d36598"
-      }
+      "playerId": "c4c663a0-8405-4db2-8971-2fc133d36598"
     }, {
       "type": "play",
       "createdAt": "2020-00-01T10:19:43+00:00",
@@ -46,9 +46,7 @@
         "position": "left",
         "parent": "2:2"
       },
-      "player": {
-        "id": "8f9c4b7d-77e6-4332-ba96-3d5853a99f84"
-      }
+      "playerId": "8f9c4b7d-77e6-4332-ba96-3d5853a99f84"
     }, {
       "type": "play",
       "createdAt": "2020-00-01T10:20:15+00:00",
@@ -57,9 +55,7 @@
         "position": "left",
         "parent": "2:5"
       },
-      "player": {
-        "id": "c4c663a0-8405-4db2-8971-2fc133d36598"
-      }
+      "playerId": "c4c663a0-8405-4db2-8971-2fc133d36598"
     }
   ]
 }
