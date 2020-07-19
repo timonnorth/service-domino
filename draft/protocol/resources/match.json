@@ -1,7 +1,9 @@
 {
   "id": "bbe95a6c-b775-49f2-8fd4-c7d48db0de71",
-  "lastUpdateHash": "f247735d-3df9-4d19-8b7d-899c50dfa83c",
+  "lastUpdatedHash": "f247735d-3df9-4d19-8b7d-899c50dfa83c",
+  "createdAt": "2020-00-01T10:15:37+00:00",
   "family": "basic",
+  "rules": "basic",
   "status": "play",
   "players": [
     {

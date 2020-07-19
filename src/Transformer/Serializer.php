@@ -18,10 +18,14 @@ class Serializer
     }
 
     /**
+     * @param object $data
      * @throws Encoder\Exception
      */
-    public function serialize(\stdClass $data): string
+    public function serialize($data): string
     {
+        if (!is_object($data)) {
+            throw new HydrateException();
+        }
         return $this->encoder->encode($this->normalizeObject($data));
     }
 
@@ -29,7 +33,7 @@ class Serializer
      * @throws Encoder\Exception
      * @throws Exception
      */
-    public function deserialize(string $value, string $classname = ''): \stdClass
+    public function deserialize(string $value, string $classname = ''): object
     {
         $data = $this->encoder->decode($value);
 
@@ -40,7 +44,11 @@ class Serializer
         return $this->hydrate($data, $classname);
     }
 
-    protected function normalizeObject(\stdClass $data): \stdClass
+    /**
+     * @param object $data
+     * @return object
+     */
+    protected function normalizeObject($data): object
     {
         $data->__cn = get_class($data);
 
@@ -62,7 +70,7 @@ class Serializer
     /**
      * @throws HydrateException
      *
-     * @return array|\stdClass
+     * @return array|object
      */
     protected function hydrate(array $data, string $classname = '')
     {

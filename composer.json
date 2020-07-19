@@ -16,8 +16,10 @@
         }
     ],
     "require": {
-        "php" : "~7.2",
-        "ext-json": "*"
+        "php": "~7.2",
+        "ext-json": "*",
+        "php-di/php-di": "^6.2",
+        "ramsey/uuid": "^4.0"
     },
     "require-dev": {
         "mollie/php-coding-standards": "^1.2",
