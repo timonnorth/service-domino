@@ -26,16 +26,7 @@ class File implements Contract
         $filename = $this->formatMatchFilename($id);
 
         if ($id != '' && is_file($filename)) {
-            $data = file_get_contents($filename);
-
-            if ($data !== false && $data != '') {
-                $match = $this->serializer->deserialize($data);
-
-                if (!($match instanceof Match)) {
-                    // Do not generate error, just ignore not correct value.
-                    $match = null;
-                }
-            }
+            $match = $this->deserializeMatch(file_get_contents($filename));
         }
 
         return $match;
@@ -46,6 +37,22 @@ class File implements Contract
         if ($match->id != '') {
             file_put_contents($this->formatMatchFilename($match->id), $this->serializer->serialize($match));
         }
+    }
+
+    protected function deserializeMatch($data): ?Match
+    {
+        $match = null;
+
+        if ($data !== false && $data != '') {
+            $match = $this->serializer->deserialize($data);
+
+            if (!($match instanceof Match)) {
+                // Do not generate error, just ignore not correct value.
+                $match = null;
+            }
+        }
+
+        return $match;
     }
 
     protected function formatMatchFilename(string $id): string
