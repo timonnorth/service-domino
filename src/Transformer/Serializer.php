@@ -19,6 +19,7 @@ class Serializer
 
     /**
      * @param object $data
+     *
      * @throws Encoder\Exception
      */
     public function serialize($data): string
@@ -26,6 +27,7 @@ class Serializer
         if (!is_object($data)) {
             throw new HydrateException();
         }
+
         return $this->encoder->encode($this->normalizeObject($data));
     }
 
@@ -46,7 +48,6 @@ class Serializer
 
     /**
      * @param object $data
-     * @return object
      */
     protected function normalizeObject($data): object
     {

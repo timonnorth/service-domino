@@ -17,23 +17,27 @@ class File implements Contract
     public function __construct(Serializer $serializer, string $folder)
     {
         $this->serializer = $serializer;
-        $this->folder = $folder;
+        $this->folder     = $folder;
     }
 
     public function getMatch(string $id): ?Match
     {
-        $match = null;
+        $match    = null;
         $filename = $this->formatMatchFilename($id);
+
         if ($id != '' && is_file($filename)) {
             $data = file_get_contents($filename);
+
             if ($data !== false && $data != '') {
                 $match = $this->serializer->deserialize($data);
+
                 if (!($match instanceof Match)) {
                     // Do not generate error, just ignore not correct value.
                     $match = null;
                 }
             }
         }
+
         return $match;
     }
 

@@ -19,6 +19,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             $containerBuilder->addDefinitions(__DIR__ . '/config.php');
             $this->container = $containerBuilder->build();
         }
+
         return $this->container;
     }
 }

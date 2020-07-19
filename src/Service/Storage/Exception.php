@@ -6,5 +6,4 @@ namespace Service\Storage;
 
 class Exception extends \Exception
 {
-    //
 }

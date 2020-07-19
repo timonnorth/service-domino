@@ -7,5 +7,5 @@ return [
         ->constructor(
             \DI\get('Serializer'),
             sprintf('%s/resources/filestorage', __DIR__)
-        )
+        ),
 ];
