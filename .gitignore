@@ -6,3 +6,6 @@ psr12.sh
 test.sh
 update.sh
 .php_cs.cache
+build.sh
+fix.sh
+tests/tmp/filestorage/

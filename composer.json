@@ -18,8 +18,11 @@
     "require": {
         "php": "~7.2",
         "ext-json": "*",
+        "ext-gettext": "*",
         "php-di/php-di": "^6.2",
-        "ramsey/uuid": "^4.0"
+        "predis/predis": "^1.1",
+        "ramsey/uuid": "^4.0",
+        "symfony/lock": "^5.1"
     },
     "require-dev": {
         "mollie/php-coding-standards": "^1.2",

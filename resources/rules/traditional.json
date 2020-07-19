@@ -1,0 +1,6 @@
+{
+  "family": "traditional",
+  "count_max_players": 4,
+  "count_tiles_by_players": [7, 5, 5],
+  "is_first_move_random": false
+}
