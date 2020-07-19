@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Transformer\Encoder;
+namespace Tests\Transformer\Serializer;
 
-use Transformer\Encoder\Exception;
+use Transformer\Serializer\Exception;
 
 class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,7 +13,7 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAutoMessage()
     {
-        static::assertEquals('Can not encode/decode JSON', (new Exception())->getMessage());
+        static::assertEquals('Can not serialize/deserialize object', (new Exception())->getMessage());
     }
 
     /**
