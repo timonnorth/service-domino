@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Transformer;
 
+use Transformer\Encoder\EncoderInterface;
 use Transformer\Serializer\Exception;
 use Transformer\Serializer\HydrateException;
 
 class Serializer
 {
-    /** @var Encoder\Contract */
+    /** @var EncoderInterface */
     protected $encoder;
 
-    public function __construct(Encoder\Contract $encoder)
+    public function __construct(EncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }

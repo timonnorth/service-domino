@@ -6,7 +6,7 @@ namespace Service\Storage;
 
 use Entity\Match;
 
-interface Contract
+interface StorageInterface
 {
     public function getMatch(string $id): ?Match;
 

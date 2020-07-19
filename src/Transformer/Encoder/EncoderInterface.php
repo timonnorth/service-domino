@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Transformer\Encoder;
 
-interface Contract
+interface EncoderInterface
 {
     /**
      * @throws Exception

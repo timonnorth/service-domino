@@ -7,7 +7,7 @@ namespace Service\Storage;
 use Entity\Match;
 use Transformer\Serializer;
 
-class File implements Contract
+class File implements StorageInterface
 {
     /** @var Serializer */
     protected $serializer;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Transformer\Encoder;
 
-class Json implements Contract
+class Json implements EncoderInterface
 {
     /**
      * @throws Exception
