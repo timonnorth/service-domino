@@ -13,9 +13,10 @@ class Tile
 
     public static function create(int $left, int $right): Tile
     {
-        $tile = new Tile();
-        $tile->left = $left;
+        $tile        = new Tile();
+        $tile->left  = $left;
         $tile->right = $right;
+
         return $tile;
     }
 }

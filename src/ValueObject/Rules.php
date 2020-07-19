@@ -6,9 +6,9 @@ namespace ValueObject;
 
 class Rules
 {
-    protected const DEFAULT_NAME = "default";
-    protected const DEFAULT_FAMILY = "traditional";
-    protected const DEFAULT_COUNT_MAX_PLAYERS = 2;
+    protected const DEFAULT_NAME                   = "default";
+    protected const DEFAULT_FAMILY                 = "traditional";
+    protected const DEFAULT_COUNT_MAX_PLAYERS      = 2;
     protected const DEFAULT_COUNT_TILES_WHEN_START = 7;
 
     /** @var string */
@@ -21,6 +21,7 @@ class Rules
     public $countTilesWhenStartDefault;
     /**
      * First value is count of tiles for 2 players, than for 3 etc, up to $countMaxPlayers.
+     *
      * @var array
      */
     public $countTilesWhenByPlayers;
@@ -32,29 +33,35 @@ class Rules
     public static function createByParameters(array $parameters): Rules
     {
         $rules = new Rules();
+
         if (isset($parameters['name']) && $parameters['name'] != '') {
             $rules->name = (string)$parameters['name'];
         } else {
             $rules->name = self::DEFAULT_NAME;
         }
+
         if (isset($parameters['family']) && $parameters['family'] != '') {
             $rules->family = (string)$parameters['family'];
         } else {
             $rules->family = self::DEFAULT_FAMILY;
         }
+
         if (isset($parameters['count_max_players']) && $parameters['count_max_players'] > 0) {
             $rules->countMaxPlayers = (int)$parameters['count_max_players'];
         } else {
             $rules->countMaxPlayers = self::DEFAULT_COUNT_MAX_PLAYERS;
         }
+
         if (isset($parameters['count_tiles_when_start']) && $parameters['count_tiles_when_start'] > 0) {
             $rules->countTilesWhenStartDefault = (int)$parameters['count_tiles_when_start'];
         } else {
             $rules->countTilesWhenStartDefault = self::DEFAULT_COUNT_TILES_WHEN_START;
         }
+
         if (isset($parameters['count_tiles_by_players']) && is_array($parameters['count_tiles_by_players'])) {
             $rules->countTilesWhenByPlayers = $parameters['count_tiles_by_players'];
         }
+
         if (isset($parameters['is_first_move_random'])) {
             $rules->isFirstMoveRandom = (bool)$parameters['is_first_move_random'];
         } else {
@@ -69,12 +76,14 @@ class Rules
         if ($this->tilesAll === null) {
             $this->generateDefaultTiles();
         }
+
         return $this->tilesAll;
     }
 
     protected function generateDefaultTiles()
     {
-        $this->tilesAll = new Tiles();
+        $this->tilesAll       = new Tiles();
+        // More faster than for -> for.
         $this->tilesAll->list = [
             Tile::create(0, 0),
             Tile::create(0, 1),

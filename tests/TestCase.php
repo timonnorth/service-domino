@@ -30,7 +30,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             $containerBuilder->addDefinitions(__DIR__ . '/config.php');
             $this->container = $containerBuilder->build();
 
-            $store = new SemaphoreStore();
+            $store   = new SemaphoreStore();
             $factory = new LockFactory($store);
             $this->container->set('Locker', $factory);
         }

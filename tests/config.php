@@ -10,5 +10,5 @@ return [
         ),
     'GameFactory' => \DI\create(\Service\GameFactory::class)
         ->constructor(\DI\get('Json')),
-    'Json' => \DI\create(\Transformer\Encoder\Json::class)
+    'Json' => \DI\create(\Transformer\Encoder\Json::class),
 ];

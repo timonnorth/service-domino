@@ -22,12 +22,13 @@ class Player
 
     public static function create(string $name): Player
     {
-        $player = new Player();
-        $player->id = Uuid::uuid4()->toString();
+        $player         = new Player();
+        $player->id     = Uuid::uuid4()->toString();
         $player->secret = Uuid::uuid4()->toString();
-        $player->name = trim($name);
+        $player->name   = trim($name);
         $player->marker = false;
-        $player->tiles = [];
+        $player->tiles  = [];
+
         return $player;
     }
 
@@ -35,11 +36,13 @@ class Player
     {
         $result = null;
         $length = strlen($this->name);
+
         if ($length < 2) {
             $result = gettext("Name should be minimum 2 character");
         } elseif ($length > 80) {
             $result = gettext("Name should be maximum 80 character");
         }
+
         return $result;
     }
 }

@@ -9,7 +9,7 @@ use ValueObject\Rules;
 
 class GameFactory
 {
-    /** @var EncoderInterface $encoder */
+    /** @var EncoderInterface */
     protected $encoder;
 
     public function __construct(EncoderInterface $jsonEncoder)
@@ -20,14 +20,16 @@ class GameFactory
     public function createByRulesName(string $rulesName): ?Game
     {
         $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
+
         if (is_file($filename)) {
-            $rulesParams = $this->encoder->decode(file_get_contents($filename));
-            $game = new Game();
-            $game->rules = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
+            $rulesParams       = $this->encoder->decode(file_get_contents($filename));
+            $game              = new Game();
+            $game->rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
             $game->rules->name = $rulesName;
         } else {
             $game = null;
         }
+
         return $game;
     }
 }

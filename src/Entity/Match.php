@@ -32,15 +32,15 @@ class Match
 
     public static function create(Rules $rules, Player $mainPlayer): Match
     {
-        $match = new Match();
-        $match->id = Uuid::uuid4()->toString();
+        $match                  = new Match();
+        $match->id              = Uuid::uuid4()->toString();
         $match->lastUpdatedHash = Uuid::uuid4()->toString();
-        $match->createdAt = new \DateTime();
-        $match->rules = $rules->name;
-        $match->status = self::STATUS_NEW;
-        $match->players = [$mainPlayer];
-        $match->stock = Stock::create($rules->getAllTiles());
-        $match->events = [];
+        $match->createdAt       = new \DateTime();
+        $match->rules           = $rules->name;
+        $match->status          = self::STATUS_NEW;
+        $match->players         = [$mainPlayer];
+        $match->stock           = Stock::create($rules->getAllTiles());
+        $match->events          = [];
 
         return $match;
     }

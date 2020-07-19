@@ -13,11 +13,11 @@ class GameTest extends TestCase
     public function testStartNewMatchOk()
     {
         /** @var GameFactory $factory */
-        $factory = $this->getContainer()->get('GameFactory');
-        $game = $factory->createByRulesName('basic');
+        $factory     = $this->getContainer()->get('GameFactory');
+        $game        = $factory->createByRulesName('basic');
         $matchResult = $game->startNewMatch("Tiesto");
 
-        $this->assertFalse($matchResult->hasError());
+        self::assertFalse($matchResult->hasError());
         /** @var Match $match */
         $match = $matchResult->getObject();
 

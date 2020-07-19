@@ -17,17 +17,13 @@ class Result
     /** @var mixed */
     protected $object;
 
-    /**
-     * @param mixed $object
-     * @param string|null $error
-     * @return Result
-     */
-    public static function create($object, string $error = null, bool $isSystemError = false): Result
+    public static function create($object, ?string $error = null, bool $isSystemError = false): Result
     {
-        $result = new Result();
-        $result->object = $object;
-        $result->error = $error;
+        $result                = new Result();
+        $result->object        = $object;
+        $result->error         = $error;
         $result->isSystemError = $isSystemError;
+
         return $result;
     }
 
@@ -41,9 +37,6 @@ class Result
         return $this->error;
     }
 
-    /**
-     * @return mixed
-     */
     public function getObject()
     {
         return $this->object;

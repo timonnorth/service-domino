@@ -11,8 +11,9 @@ class Stock implements \Countable
 
     public static function create(Tiles $allTiles): Stock
     {
-        $stock = new Stock();
+        $stock        = new Stock();
         $stock->tiles = $allTiles;
+
         return $stock;
     }
 
