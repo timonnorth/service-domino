@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Transformer;
 
 use Transformer\Serializer\Exception;
+use Transformer\Serializer\HydrateException;
 
 class Serializer
 {
@@ -60,15 +61,20 @@ class Serializer
 
     /**
      * @return array|\stdClass
+     * @throws HydrateException
      */
     protected function hydrate(array $data, string $classname = '')
     {
-        if ($classname != '') {
-            $object = new $classname();
-        } elseif (isset($data['__cn'])) {
-            $object = new $data['__cn']();
-        } else {
-            $object = [];
+        try {
+            if ($classname != '') {
+                $object = new $classname();
+            } elseif (isset($data['__cn'])) {
+                $object = new $data['__cn']();
+            } else {
+                $object = [];
+            }
+        } catch (\Error $e) {
+            throw new HydrateException($e->getMessage());
         }
 
         if (isset($data['__cn'])) {

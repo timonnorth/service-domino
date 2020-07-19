@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Transformer\Encoder;
 
+use Transformer\Encoder\Exception;
 use Transformer\Encoder\Json;
 use Transformer\Serializer;
 
@@ -19,8 +20,21 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
 
     public function testDeserializeOk()
     {
-        $object = $this->getSerializer()->deserialize($this->getValue1(), \stdClass::class);
+        $object = $this->getSerializer()->deserialize($this->getValue1());
         self::assertEquals($this->getObject1(), $object);
+    }
+
+    public function testDeserializeError()
+    {
+        $this->expectException(Exception::class);
+        $this->getSerializer()->deserialize('tiesto');
+    }
+
+    public function testDeserializeUndefinedClassname()
+    {
+        $this->expectException(Serializer\HydrateException::class);
+        $this->expectExceptionMessage("Class 'tiesto' not found");
+        $this->getSerializer()->deserialize('{"__cn":"tiesto"}');
     }
 
     protected function getSerializer(): Serializer
