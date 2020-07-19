@@ -27,7 +27,7 @@ class Player
         $player->secret = Uuid::uuid4()->toString();
         $player->name   = trim($name);
         $player->marker = false;
-        $player->tiles  = [];
+        $player->tiles  = new Tiles();
 
         return $player;
     }

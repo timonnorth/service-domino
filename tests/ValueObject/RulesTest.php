@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\ValueObject\Rules;
+namespace Tests\ValueObject;
 
 use ValueObject\Rules;
 

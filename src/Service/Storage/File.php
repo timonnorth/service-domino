@@ -39,7 +39,7 @@ class File implements StorageInterface
         }
     }
 
-    protected function deserializeMatch($data): ?Match
+    protected function deserializeMatch(string $data): ?Match
     {
         $match = null;
 

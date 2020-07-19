@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Transformer\Encoder;
+namespace Tests\Transformer;
 
 use Transformer\Encoder\Exception;
 use Transformer\Encoder\Json;

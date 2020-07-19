@@ -82,7 +82,7 @@ class Rules
 
     protected function generateDefaultTiles()
     {
-        $this->tilesAll       = new Tiles();
+        $this->tilesAll = new Tiles();
         // More faster than for -> for.
         $this->tilesAll->list = [
             Tile::create(0, 0),
