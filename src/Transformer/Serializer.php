@@ -60,8 +60,9 @@ class Serializer
     }
 
     /**
-     * @return array|\stdClass
      * @throws HydrateException
+     *
+     * @return array|\stdClass
      */
     protected function hydrate(array $data, string $classname = '')
     {
