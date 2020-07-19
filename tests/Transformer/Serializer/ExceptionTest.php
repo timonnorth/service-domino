@@ -13,7 +13,7 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAutoMessage()
     {
-        static::assertEquals('Can not serialize/deserialize object', (new Exception())->getMessage());
+        self::assertEquals('Can not serialize/deserialize object', (new Exception())->getMessage());
     }
 
     /**
@@ -21,6 +21,6 @@ class ExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testManualMessage()
     {
-        static::assertEquals('Tiesto', (new Exception('Tiesto'))->getMessage());
+        self::assertEquals('Tiesto', (new Exception('Tiesto'))->getMessage());
     }
 }

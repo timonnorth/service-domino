@@ -17,13 +17,13 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         $encoder = new Json();
 
         $str = "I am string";
-        static::assertEquals('"I am string"', $encoder->encode($str));
+        self::assertEquals('"I am string"', $encoder->encode($str));
 
         $int = 12345;
-        static::assertEquals(12345, $encoder->encode($int));
+        self::assertEquals(12345, $encoder->encode($int));
 
         $ar = [123, 23 => "tiesto"];
-        static::assertEquals('{"0":123,"23":"tiesto"}', $encoder->encode($ar));
+        self::assertEquals('{"0":123,"23":"tiesto"}', $encoder->encode($ar));
     }
 
     /**
@@ -33,11 +33,11 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     {
         $encoder = new Json();
 
-        static::assertEquals("I am string", $encoder->decode('"I am string"'));
+        self::assertEquals("I am string", $encoder->decode('"I am string"'));
 
-        static::assertEquals(12345, $encoder->decode('12345'));
+        self::assertEquals(12345, $encoder->decode('12345'));
 
-        static::assertEquals([123, 23 => "tiesto"], $encoder->decode('{"0":123,"23":"tiesto"}'));
+        self::assertEquals([123, 23 => "tiesto"], $encoder->decode('{"0":123,"23":"tiesto"}'));
     }
 
     /**
