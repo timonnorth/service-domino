@@ -24,7 +24,7 @@ class Game
     {
         try {
             if (!($this->rules instanceof Rules)) {
-                throw new Exception("Rules undefined to start new game");
+                throw new Exception('Rules undefined to start new game');
             }
             $playerResult = $this->createPlayer($playerName);
 
@@ -35,7 +35,7 @@ class Game
             }
         } catch (\Exception $e) {
             //@todo Log exception.
-            $result = Result::create(null, $e->getMessage(), true);
+            $result = Result::create(null, gettext($e->getMessage()), true);
         }
 
         return $result;

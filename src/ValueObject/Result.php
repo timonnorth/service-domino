@@ -37,6 +37,11 @@ class Result
         return $this->error;
     }
 
+    public function isSystemError(): bool
+    {
+        return $this->isSystemError;
+    }
+
     public function getObject()
     {
         return $this->object;

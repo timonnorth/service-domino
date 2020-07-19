@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Service;
 
 use Entity\Match;
+use Service\Game;
 use Service\GameFactory;
 use Tests\TestCase;
 
@@ -38,5 +39,25 @@ class GameTest extends TestCase
 
         self::assertIsArray($match->events);
         self::assertEquals(0, count($match->events));
+    }
+
+    public function testStartNewMatchRulesUndefined()
+    {
+        $game        = new Game();
+        $matchResult = $game->startNewMatch("Tiesto");
+        self::assertTrue($matchResult->hasError());
+        self::assertTrue($matchResult->isSystemError());
+        self::assertEquals('Rules undefined to start new game', $matchResult->getError());
+    }
+
+    public function testStartNewMatchBadPlayerName()
+    {
+        /** @var GameFactory $factory */
+        $factory     = $this->getContainer()->get('GameFactory');
+        $game        = $factory->createByRulesName('basic');
+        $matchResult = $game->startNewMatch("t");
+        self::assertTrue($matchResult->hasError());
+        self::assertFalse($matchResult->isSystemError());
+        self::assertEquals('Name should be minimum 2 character', $matchResult->getError());
     }
 }
