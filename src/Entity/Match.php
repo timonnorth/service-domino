@@ -11,7 +11,7 @@ use ValueObject\Stock;
 
 class Match
 {
-    public const STATUS_NEW = 'new';
+    public const STATUS_NEW  = 'new';
     public const STATUS_PLAY = 'play';
 
     /** @var string */
@@ -33,15 +33,15 @@ class Match
 
     public static function create(Rules $rules, Player $mainPlayer): Match
     {
-        $match = new Match();
-        $match->id = Uuid::uuid4()->toString();
+        $match                  = new Match();
+        $match->id              = Uuid::uuid4()->toString();
         $match->lastUpdatedHash = Uuid::uuid4()->toString();
-        $match->createdAt = time();
-        $match->rules = $rules->name;
-        $match->status = self::STATUS_NEW;
-        $match->players = [$mainPlayer];
-        $match->stock = Stock::create($rules->getAllTiles());
-        $match->events = [];
+        $match->createdAt       = time();
+        $match->rules           = $rules->name;
+        $match->status          = self::STATUS_NEW;
+        $match->players         = [$mainPlayer];
+        $match->stock           = Stock::create($rules->getAllTiles());
+        $match->events          = [];
 
         return $match;
     }
@@ -49,26 +49,28 @@ class Match
     public function getPlayer(string $playerId): ?Player
     {
         $result = null;
+
         foreach ($this->players as $player) {
             if ($player->id == $playerId) {
                 $result = $player;
+
                 break;
             }
         }
+
         return $result;
     }
 
     /**
      * Register new player in non-active player-slot. Otherwise does not add.
-     *
-     * @param Player $player
      */
     public function registerPlayer(Player $player): void
     {
         foreach ($this->players as $key => $value) {
-            if (null === $value->id) {
+            if ($value->id === null) {
                 // Can inject player in non-active slot.
                 $this->players[$key] = $player;
+
                 break;
             }
         }
@@ -78,27 +80,30 @@ class Match
     {
         $result = false;
         $player = $this->getPlayer($playerId);
+
         if ($player && $player->secret == $playerSecret) {
             $result = true;
         }
+
         return $result;
     }
 
     public function getCountRegisteredPlayers(): int
     {
         $count = 0;
+
         foreach ($this->players as $player) {
-            if ('' != $player->id) {
+            if ($player->id != '') {
                 $count++;
             }
         }
+
         return $count;
     }
 
     public function addPlayEvent(Event\DataPlay $data, string $playerId)
     {
-        $this->events[] =
-            Event::create(Event::TYPE_PLAY, $data, $playerId);
+        $this->events[] = Event::create(Event::TYPE_PLAY, $data, $playerId);
     }
 
     /**
@@ -106,8 +111,9 @@ class Match
      */
     public function moveMarker()
     {
-        $ind = $this->getPlayerIndexMarker();
+        $ind                         = $this->getPlayerIndexMarker();
         $this->players[$ind]->marker = false;
+
         if (++$ind >= count($this->players)) {
             $ind = 0;
         }
@@ -116,18 +122,19 @@ class Match
 
     /**
      * Returns key in players array who has marker.
-     *
-     * @return int
      */
     protected function getPlayerIndexMarker(): int
     {
         $ind = 0;
+
         foreach ($this->players as $key => $player) {
             if ($player->marker) {
                 $ind = $key;
+
                 break;
             }
         }
+
         return $ind;
     }
 }

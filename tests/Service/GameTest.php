@@ -29,9 +29,9 @@ class GameTest extends TestCase
 
         self::assertFalse($matchResult->hasError());
         /** @var Match $match */
-        $match = $matchResult->getObject();
-        $this->matchId = $match->id;
-        $this->playerId = $match->players[0]->id;
+        $match              = $matchResult->getObject();
+        $this->matchId      = $match->id;
+        $this->playerId     = $match->players[0]->id;
         $this->playerSecret = $match->players[0]->secret;
 
         self::assertTrue($match->id != '');
@@ -57,7 +57,7 @@ class GameTest extends TestCase
     public function testStartNewMatchRulesUndefined()
     {
         $game        = new Game($this->getContainer()->get('Storage'), $this->getContainer()->get('Locker'), null);
-        $matchResult = $game->startNewMatch("Tiesto",0 );
+        $matchResult = $game->startNewMatch("Tiesto", 0);
         self::assertTrue($matchResult->hasError());
         self::assertTrue($matchResult->isSystemError());
         self::assertEquals('Rules undefined to start new game', $matchResult->getError());
@@ -95,9 +95,9 @@ class GameTest extends TestCase
 
     public function testRegisterNewPlayersDrawFirstMove()
     {
-        $factory     = $this->getContainer()->get('GameFactory');
+        $factory = $this->getContainer()->get('GameFactory');
         /** @var Game $game */
-        $game        = $factory->createByRulesName('traditional');
+        $game = $factory->createByRulesName('traditional');
         $game->startNewMatch("Tiesto", 4);
 
         $result = $game->registerNewPlayer("John Smith");
@@ -119,7 +119,7 @@ class GameTest extends TestCase
 
         // Check count of tiles.
         for ($i = 0; $i < 4; $i++) {
-            if (3 > $i && $game->getMatch()->players[$i + 1]->marker || 3 == $i && $game->getMatch()->players[0]->marker) {
+            if ($i < 3 && $game->getMatch()->players[$i + 1]->marker || $i == 3 && $game->getMatch()->players[0]->marker) {
                 $expected = 4;
                 $playerId = $game->getMatch()->players[$i]->id;
             } else {
@@ -176,10 +176,11 @@ class GameTest extends TestCase
 
     protected function startGame(): Game
     {
-        $factory     = $this->getContainer()->get('GameFactory');
+        $factory = $this->getContainer()->get('GameFactory');
         /** @var Game $game */
-        $game        = $factory->createByRulesName('basic');
+        $game = $factory->createByRulesName('basic');
         $game->startNewMatch("Tiesto", 0);
+
         return $game;
     }
 }

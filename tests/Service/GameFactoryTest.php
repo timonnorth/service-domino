@@ -8,7 +8,6 @@ use Entity\Match;
 use Service\Game;
 use Service\GameFactory;
 use Tests\TestCase;
-use Transformer\Encoder\Json;
 
 class GameFactoryTest extends TestCase
 {
@@ -50,7 +49,7 @@ class GameFactoryTest extends TestCase
 
     public function testCreateByMatchIdOk()
     {
-        $game = $this->getContainer()->get('GameFactory')->createByRulesName('basic');
+        $game        = $this->getContainer()->get('GameFactory')->createByRulesName('basic');
         $matchResult = $game->startNewMatch("Tiesto", 0);
         /** @var Match $matchCreated */
         $matchCreated = $matchResult->getObject();

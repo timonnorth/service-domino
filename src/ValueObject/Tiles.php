@@ -29,18 +29,17 @@ class Tiles implements \Countable
 
     /**
      * Get shuffled tiles.
-     *
-     * @param int $count
-     * @return array
      */
     public function pop(int $count = 1): array
     {
         $list = [];
+
         for ($i = 0; $i < $count; $i++) {
-            $key = array_rand($this->list);
+            $key    = array_rand($this->list);
             $list[] = $this->list[$key];
             unset($this->list[$key]);
         }
+
         return $list;
     }
 }

@@ -19,11 +19,12 @@ class Event
 
     public static function create(string $type, $data, string $playerId): Event
     {
-        $event = new Event();
+        $event            = new Event();
         $event->createdAt = time();
-        $event->type = $type;
-        $event->data = $data;
-        $event->playerId = $playerId;
+        $event->type      = $type;
+        $event->data      = $data;
+        $event->playerId  = $playerId;
+
         return $event;
     }
 }

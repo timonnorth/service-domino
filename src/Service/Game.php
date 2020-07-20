@@ -32,17 +32,14 @@ class Game
     /**
      * Game constructor.
      * If Match present it will be locked.
-     *
-     * @param StorageInterface $storage
-     * @param LockFactory $locker
-     * @param Match|null $match
      */
     public function __construct(StorageInterface $storage, LockFactory $locker, ?Match $match)
     {
         $this->storage = $storage;
-        $this->locker = $locker;
-        $this->match = $match;
-        if (null !== $this->match) {
+        $this->locker  = $locker;
+        $this->match   = $match;
+
+        if ($this->match !== null) {
             $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
         }
     }
@@ -59,7 +56,7 @@ class Game
 
     public function unlockMatch()
     {
-        if (null !== $this->matchLock) {
+        if ($this->matchLock !== null) {
             $this->matchLock->release();
             unset($this->matchLock);
         }
@@ -83,7 +80,8 @@ class Game
                 $result = $playerResult;
             } else {
                 $this->match = Match::create($this->rules, $playerResult->getObject());
-                $result = $this->setCountPlayers($countPlayers);
+                $result      = $this->setCountPlayers($countPlayers);
+
                 if (!$result->hasError()) {
                     $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
                     $this->storage->setMatch($this->match);
@@ -101,25 +99,27 @@ class Game
     /**
      * Registers new player to existing "new" match or returns error.
      *
-     * @param string $playerName
      * @return Result Player
      */
     public function registerNewPlayer(string $playerName): Result
     {
         try {
-            if (null == $this->match) {
+            if ($this->match == null) {
                 throw new Exception('Match undefined to register new player');
             }
+
             if (
-                Match::STATUS_NEW != $this->match->status
+                $this->match->status != Match::STATUS_NEW
                 || $this->match->getCountRegisteredPlayers() >= $this->rules->countMaxPlayers
             ) {
                 $result = Result::create(null, gettext("No free slot to register new player"));
             } else {
                 $result = $this->createPlayer($playerName, $this->match->players);
+
                 if (!$result->hasError()) {
                     // Add player to match and save it.
                     $this->match->registerPlayer($result->getObject());
+
                     if ($this->match->getCountRegisteredPlayers() >= $this->rules->countMaxPlayers) {
                         // All player slots are completed, let mortal kombat begin.
                         $this->tilesDraw();
@@ -151,6 +151,7 @@ class Game
     protected function tilesDraw(): void
     {
         $countTiles = $this->rules->getCountTilesWhenStart(count($this->match->players));
+
         foreach ($this->match->players as $key => $player) {
             $player->tiles->push($this->match->stock->tiles->pop($countTiles));
         }
@@ -163,12 +164,12 @@ class Game
     protected function firstStep(): void
     {
         if (true || $this->rules->isFirstMoveRandom) {
-            $ind = rand(0, count($this->match->players) - 1);
+            $ind                                = rand(0, count($this->match->players) - 1);
             $this->match->players[$ind]->marker = true;
-            $tiles = $this->match->players[$ind]->tiles->pop();
-        } else {
-            //@todo Family step
+            $tiles                              = $this->match->players[$ind]->tiles->pop();
         }
+        //@todo Family step
+
         $this->match->addPlayEvent(
             Event\DataPlay::create($tiles[0], null, Event\DataPlay::POSITION_ROOT),
             $this->match->players[$ind]->id
@@ -186,7 +187,7 @@ class Game
      */
     protected function createPlayer(string $playerName, array $existPlayers = []): Result
     {
-        $player = Player::create($playerName);
+        $player     = Player::create($playerName);
         $validation = $player->selfValidate();
 
         if ($validation !== null) {
@@ -213,15 +214,13 @@ class Game
      * Set count of players for Match (can be done by main player).
      * Set 2 players if argument <= 0.
      * Validate with maxPlayers.
-     *
-     * @param int $countPlayers
-     * @return Result
      */
     protected function setCountPlayers(int $countPlayers): Result
     {
-        if (2 > $countPlayers) {
+        if ($countPlayers < 2) {
             $countPlayers = 2;
         }
+
         if ($countPlayers > $this->rules->countMaxPlayers) {
             $result = Result::create(
                 null,
@@ -233,6 +232,7 @@ class Game
             }
             $result = Result::create(null);
         }
+
         return $result;
     }
 }
