@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entity;
 
 use Ramsey\Uuid\Uuid;
+use ValueObject\Edge;
 use ValueObject\Event;
 use ValueObject\Rules;
 use ValueObject\Stock;
@@ -30,6 +31,14 @@ class Match
     public $stock;
     /** @var Event[] */
     public $events;
+
+    /**
+     * Edge values of played Tiles (for now only "left" and "right").
+     * Calculates for all events.
+     *
+     * @var Edge
+     */
+    protected $edge;
 
     public static function create(Rules $rules, Player $mainPlayer): Match
     {
@@ -91,6 +100,7 @@ class Match
     public function getCountRegisteredPlayers(): int
     {
         $count = 0;
+        $count = 0;
 
         foreach ($this->players as $player) {
             if ($player->id != '') {
@@ -104,6 +114,7 @@ class Match
     public function addPlayEvent(Event\DataPlay $data, string $playerId)
     {
         $this->events[] = Event::create(Event::TYPE_PLAY, $data, $playerId);
+        $this->resetEdge();
     }
 
     /**
@@ -118,6 +129,28 @@ class Match
             $ind = 0;
         }
         $this->players[$ind]->marker = true;
+    }
+
+    public function getEdge(): Edge
+    {
+        if ($this->edge === null) {
+            $this->edge = new Edge();
+
+            foreach ($this->events as $event) {
+                if ($event->type == Event::TYPE_PLAY) {
+                    $this->updateEdgeByEvent($event->data);
+                }
+            }
+        }
+        return $this->edge;
+    }
+
+    /**
+     * Returns player who has marker.
+     */
+    public function getMarkedPlayer(): Player
+    {
+        return $this->players[$this->getPlayerIndexMarker()];
     }
 
     /**
@@ -136,5 +169,31 @@ class Match
         }
 
         return $ind;
+    }
+
+    protected function updateEdgeByEvent(Event\DataPlay $dataPlay)
+    {
+        switch ($dataPlay->position) {
+            case Event\DataPlay::POSITION_LEFT:
+                $this->edge->left = $dataPlay->tile->getOrientedLeft();
+
+                break;
+
+            case Event\DataPlay::POSITION_RIGHT:
+                $this->edge->right = $dataPlay->tile->getOrientedRight();
+
+                break;
+
+            case Event\DataPlay::POSITION_ROOT:
+                $this->edge->left  = $dataPlay->tile->getOrientedLeft();
+                $this->edge->right = $dataPlay->tile->getOrientedRight();
+
+                break;
+        }
+    }
+
+    protected function resetEdge(): void
+    {
+        $this->edge = null;
     }
 }

@@ -142,6 +142,23 @@ class Game
      */
     public function autoPlay(): void
     {
+        $player = $this->match->getMarkedPlayer();
+    }
+
+    /**
+     * Checks can player play with some Tile on hands.
+     * Returns false if player must to keep Tile from Stock (or game should be finished).
+     */
+    protected function canIPlay(Player $player): bool
+    {
+        $res = false;
+        foreach ($player->tiles->list as $tile) {
+            if ($this->match->getEdge()->canPlayByTile($tile)) {
+                $res = true;
+                break;
+            }
+        }
+        return $res;
     }
 
     /**
@@ -164,14 +181,15 @@ class Game
     protected function firstStep(): void
     {
         if (true || $this->rules->isFirstMoveRandom) {
-            $ind                                = rand(0, count($this->match->players) - 1);
+            $ind   = rand(0, count($this->match->players) - 1);
+            $tiles = $this->match->players[$ind]->tiles->pop();
+
             $this->match->players[$ind]->marker = true;
-            $tiles                              = $this->match->players[$ind]->tiles->pop();
         }
         //@todo Family step
 
         $this->match->addPlayEvent(
-            Event\DataPlay::create($tiles[0], null, Event\DataPlay::POSITION_ROOT),
+            Event\DataPlay::create($tiles[0]->setRandOrientation(), null, Event\DataPlay::POSITION_ROOT),
             $this->match->players[$ind]->id
         );
         $this->match->status = Match::STATUS_PLAY;

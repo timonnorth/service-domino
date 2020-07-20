@@ -11,13 +11,21 @@ services:
       - ./docker/nginx/local/site.conf:/etc/nginx/conf.d/default.conf
     networks:
       - code-network
-  php:
+  redis:
+    image: redis
+    container_name: redis-domino
+    ports:
+      - "6379:6379"
     networks:
       - code-network
+  php:
     volumes:
       - .:/code
     environment:
       - APP_STORAGE=files
+      - APP_REDIS_PARAMS=tcp://host.docker.internal:6379
+    networks:
+      - code-network
 
 networks:
   code-network:

@@ -29,6 +29,7 @@ class GameFactory
 
     /**
      * Game created without Match, plz start it before using Game.
+     * Returns NULL if rulesName is not valid.
      *
      * @throws \Transformer\Encoder\Exception
      */
