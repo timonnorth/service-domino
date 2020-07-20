@@ -15,15 +15,19 @@ class RulesTest extends \PHPUnit\Framework\TestCase
             'family'                 => 'test_fam',
             'count_max_players'      => 3,
             'count_tiles_when_start' => 6,
-            'count_tiles_by_players' => [7, 5, 6],
+            'count_tiles_by_players' => [9, 3],
             'is_first_move_random'   => true,
         ]);
         self::assertEquals('tiesto', $rules->name);
         self::assertEquals('test_fam', $rules->family);
         self::assertEquals(3, $rules->countMaxPlayers);
         self::assertEquals(6, $rules->countTilesWhenStartDefault);
-        self::assertEquals([7, 5, 6], $rules->countTilesWhenByPlayers);
+        self::assertEquals([9, 3], $rules->countTilesWhenByPlayers);
         self::assertTrue($rules->isFirstMoveRandom);
+
+        self::assertEquals(9, $rules->getCountTilesWhenStart(2));
+        self::assertEquals(3, $rules->getCountTilesWhenStart(3));
+        self::assertEquals(6, $rules->getCountTilesWhenStart(4));
     }
 
     public function testCreateDefault()
@@ -35,5 +39,8 @@ class RulesTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(7, $rules->countTilesWhenStartDefault);
         self::assertNull($rules->countTilesWhenByPlayers);
         self::assertFalse($rules->isFirstMoveRandom);
+
+        self::assertEquals(7, $rules->getCountTilesWhenStart(2));
+        self::assertEquals(7, $rules->getCountTilesWhenStart(3));
     }
 }

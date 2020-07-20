@@ -9,6 +9,10 @@ return [
             sprintf('%s/tmp/filestorage', __DIR__)
         ),
     'GameFactory' => \DI\create(\Service\GameFactory::class)
-        ->constructor(\DI\get('Json')),
+        ->constructor(
+            \DI\get('Json'),
+            \DI\get('Storage'),
+            \DI\get('Locker')
+        ),
     'Json' => \DI\create(\Transformer\Encoder\Json::class),
 ];

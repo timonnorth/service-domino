@@ -71,6 +71,21 @@ class Rules
         return $rules;
     }
 
+    /**
+     * According to rules count of "starting" tiles can be different.
+     *
+     * @return int
+     */
+    public function getCountTilesWhenStart(int $countPlayers): int
+    {
+        if (isset($this->countTilesWhenByPlayers[$countPlayers - 2])) {
+            $count = $this->countTilesWhenByPlayers[$countPlayers - 2];
+        } else {
+            $count = $this->countTilesWhenStartDefault;
+        }
+        return $count;
+    }
+
     public function getAllTiles(): Tiles
     {
         if ($this->tilesAll === null) {
