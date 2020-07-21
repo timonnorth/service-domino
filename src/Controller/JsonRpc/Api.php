@@ -9,6 +9,9 @@ use Datto\JsonRpc\Exceptions\MethodException;
 use DI\Container;
 use Entity\Match;
 use Service\Game;
+use Transformer\Arrayable;
+use Transformer\Entity\Player;
+use Transformer\Entity\PlayerMain;
 
 class Api implements Evaluator
 {
@@ -29,6 +32,7 @@ class Api implements Evaluator
      * @throws ArgumentException
      * @throws MethodException
      * @throws ServerErrorException
+     * @throws \Datto\JsonRpc\Exceptions\Exception
      */
     public function evaluate($method, $arguments)
     {
@@ -39,9 +43,11 @@ class Api implements Evaluator
         try {
             switch ($method) {
                 case self::METHOD_NEW_MATCH:
-                    $response = $this->newMatch($arguments);
+                    $response = $this->startNewMatch($arguments);
                     break;
             }
+        } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
+            throw $e;
         } catch (\Exception $e) {
             //@todo Log.
             throw new ServerErrorException();
@@ -51,27 +57,22 @@ class Api implements Evaluator
             throw new MethodException();
         }
 
-        return $response;
+        return $response->toArray();
     }
 
     /**
+     * Returns created main Player.
+     *
      * @param $arguments
-     * @return Match
+     * @return Arrayable
      * @throws ArgumentException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws ServerErrorException
      */
-    protected function newMatch($arguments): Match
+    protected function startNewMatch(array $arguments): Arrayable
     {
-        if (!isset($arguments['name'])) {
-            throw new ArgumentException(gettext('Name param undefined'));
-        }
-        if (!isset($arguments['players'])) {
-            throw new ArgumentException(gettext('Players param undefined'));
-        }
-        if (!isset($arguments['rules'])) {
-            throw new ArgumentException(gettext('Rules param undefined'));
-        }
+        $this->checkRequiredParams(['name', 'players', 'rules'], $arguments);
 
         $factory = $this->container->get('GameFactory');
         /** @var Game $game */
@@ -81,13 +82,27 @@ class Api implements Evaluator
         }
         $result = $game->startNewMatch($arguments['name'], $arguments['players']);
         if ($result->hasError()) {
+            if ($result->isSystemError()) {
+                throw new ServerErrorException();
+            }
             throw new ArgumentException($result->getError());
-        } else {
-            $res = $result->getObject();
         }
 
-        //$res = new \stdClass();
-        //$res->asd = "opana";
-        return $res;
+        return PlayerMain::create($result->getObject()->players[0]);
+    }
+    
+
+    /**
+     * @param array $requires
+     * @param array $arguments
+     * @throws ArgumentException
+     */
+    protected function checkRequiredParams(array $requires, array $arguments): void
+    {
+        foreach ($requires as $require) {
+            if (!isset($arguments[$require])) {
+                throw new ArgumentException(sprintf(gettext('Param "%s" is undefined'), $require));
+            }
+        }
     }
 }

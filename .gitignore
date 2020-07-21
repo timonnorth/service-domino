@@ -9,3 +9,4 @@ update.sh
 build.sh
 fix.sh
 tests/tmp/filestorage/
+/var/tmp
