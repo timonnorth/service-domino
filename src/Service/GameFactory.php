@@ -7,24 +7,22 @@ namespace Service;
 use Entity\Match;
 use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
-use Transformer\Encoder\EncoderInterface;
 use ValueObject\Result;
-use ValueObject\Rules;
 
 class GameFactory
 {
-    /** @var EncoderInterface */
-    protected $encoder;
+    /** @var RulesLoader */
+    protected $rulesLoader;
     /** @var StorageInterface */
     protected $storage;
     /** @var LockFactory */
     protected $locker;
 
-    public function __construct(EncoderInterface $jsonEncoder, StorageInterface $storage, LockFactory $locker)
+    public function __construct(RulesLoader $rulesLoader, StorageInterface $storage, LockFactory $locker)
     {
-        $this->encoder = $jsonEncoder;
-        $this->storage = $storage;
-        $this->locker  = $locker;
+        $this->rulesLoader = $rulesLoader;
+        $this->storage     = $storage;
+        $this->locker      = $locker;
     }
 
     /**
@@ -35,7 +33,7 @@ class GameFactory
      */
     public function createByRulesName(string $rulesName): ?Game
     {
-        $rules = $this->loadRules($rulesName);
+        $rules = $this->rulesLoader->loadRules($rulesName);
 
         if ($rules) {
             $game        = new Game($this->storage, $this->locker, null);
@@ -70,7 +68,7 @@ class GameFactory
                 $result = Result::create(null, $message);
             } else {
                 $game        = new Game($this->storage, $this->locker, $match);
-                $game->rules = $this->loadRules($match->rules);
+                $game->rules = $this->rulesLoader->loadRules($match->rules);
 
                 if (!$game->rules) {
                     $result = Result::create(null, gettext('Rules not found'));
@@ -84,24 +82,5 @@ class GameFactory
         }
 
         return $result;
-    }
-
-    /**
-     * Load rules from resources by its name.
-     *
-     * @throws \Transformer\Encoder\Exception
-     */
-    protected function loadRules(string $rulesName): ?Rules
-    {
-        $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
-
-        if (is_file($filename)) {
-            $rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
-            $rules->name = $rulesName;
-        } else {
-            $rules = null;
-        }
-
-        return $rules;
     }
 }

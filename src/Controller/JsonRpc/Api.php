@@ -9,6 +9,7 @@ use Datto\JsonRpc\Exceptions\MethodException;
 use DI\Container;
 use Service\Game;
 use Transformer\Arrayable;
+use Transformer\Resource\ArrayList;
 use Transformer\Resource\Match;
 use Transformer\Resource\MatchNew;
 use ValueObject\Result;
@@ -20,6 +21,7 @@ class Api implements Evaluator
     protected const METHOD_GET_MATCH       = "get-match";
     protected const METHOD_REGISTER_PLAYER = "register-player";
     protected const METHOD_PLAY            = "play";
+    protected const METHOD_RULES           = "rules";
 
     /** @var Container */
     protected $container;
@@ -66,6 +68,11 @@ class Api implements Evaluator
 
                     break;
 
+                case self::METHOD_RULES:
+                    $response = $this->rules();
+
+                    break;
+
                 default:
                     throw new MethodException();
 
@@ -87,6 +94,11 @@ class Api implements Evaluator
             //@todo Log Serializing.
             throw new ServerErrorException();
         }
+    }
+
+    protected function rules(): Arrayable
+    {
+        return ArrayList::create($this->container->get('RulesLoader')->getAllRulesNames());
     }
 
     /**
