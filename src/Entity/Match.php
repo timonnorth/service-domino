@@ -101,7 +101,6 @@ class Match
     public function getCountRegisteredPlayers(): int
     {
         $count = 0;
-        $count = 0;
 
         foreach ($this->players as $player) {
             if (!empty($player->id)) {
