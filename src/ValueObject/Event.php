@@ -7,6 +7,8 @@ namespace ValueObject;
 class Event
 {
     public const TYPE_PLAY = 'play';
+    public const TYPE_DRAW = 'draw';
+    public const TYPE_WIN = 'win';
 
     /** @var string */
     public $type;

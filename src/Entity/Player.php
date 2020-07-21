@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Entity;
 
 use Ramsey\Uuid\Uuid;
+use Transformer\Resource\Event\Play;
 use ValueObject\Tiles;
 
 class Player
@@ -19,6 +20,13 @@ class Player
     public $marker;
     /** @var Tiles */
     public $tiles;
+    /**
+     * System flag, sets true when player can't play by his/her Tiles. The idea is when all players are not playable,
+     * we will detect it and finish the match.
+     *
+     * @var bool
+     */
+    protected $deadlock;
 
     public static function create(string $name): Player
     {
@@ -57,5 +65,16 @@ class Player
         $this->marker = true;
 
         return $this;
+    }
+
+    public function setDeadlock(): Player
+    {
+        $this->deadlock = true;
+        return $this;
+    }
+
+    public function isDeadlock(): bool
+    {
+        return (bool)$this->deadlock;
     }
 }

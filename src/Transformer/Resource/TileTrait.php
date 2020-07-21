@@ -11,7 +11,7 @@ trait TileTrait
     /**
      * Represents Tile as string (for json etc).
      *
-     * @param ?Tile $tile
+     * @param Tile|null $tile
      *
      * @return string
      */

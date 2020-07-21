@@ -6,19 +6,16 @@ namespace ValueObject;
 
 class Tile
 {
-    /** Normal orientation: left side is in the left and right in the right.  */
-    public const ORIENTATION_NORMAL = "normal";
-    /** Reverse orientation: left side is in the right and right in the left.  */
-    public const ORIENTATION_REVERSE = "reverse";
-
     /** @var int */
     public $left;
     /** @var int */
     public $right;
     /**
+     * Normal orientation  - 0: left side is in the left and right in the right.
+     * Reverse orientation - 1: left side is in the right and right in the left.
      * Orientation is empty until used in event (played).
      *
-     * @var string
+     * @var int
      */
     public $orientation;
 
@@ -33,34 +30,38 @@ class Tile
 
     public function getOrientedLeft(): int
     {
-        if ($this->orientation == self::ORIENTATION_REVERSE) {
-            $left = $this->right;
-        } else {
-            $left = $this->left;
-        }
-
-        return $left;
+        return $this->orientation ? $this->right : $this->left;
     }
 
     public function getOrientedRight(): int
     {
-        if ($this->orientation == self::ORIENTATION_REVERSE) {
-            $right = $this->left;
-        } else {
-            $right = $this->right;
-        }
-
-        return $right;
+        return $this->orientation ? $this->left : $this->right;
     }
 
     public function setRandOrientation(): Tile
     {
-        if (rand(0, 1) == 1) {
-            $this->orientation = self::ORIENTATION_REVERSE;
-        } else {
-            $this->orientation = self::ORIENTATION_NORMAL;
-        }
+        $this->orientation = rand(0, 1);
+        return $this;
+    }
 
+    public function isEqual(Tile $tile): bool
+    {
+        return $this->left === $tile->left && $this->right == $tile->right
+            || $this->left === $tile->right && $this->right == $tile->left;
+    }
+
+    public function hasEdge(int $edge): bool
+    {
+        return $this->left == $edge || $this->right == $edge;
+    }
+
+    public function normalize(): Tile
+    {
+        if ($this->left > $this->right) {
+            $tmp = $this->left;
+            $this->left = $this->right;
+            $this->right = $tmp;
+        }
         return $this;
     }
 }

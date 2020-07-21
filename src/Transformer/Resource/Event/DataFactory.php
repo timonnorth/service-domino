@@ -21,6 +21,16 @@ class DataFactory
 
                 break;
 
+            case Event::TYPE_DRAW:
+                $res = Tiles::create($data);
+
+                break;
+
+            case Event::TYPE_WIN:
+                $res = Score::create($data);
+
+                break;
+
             default:
                 throw new ResourceException(sprintf('Undefined event type "%s"', $type));
 

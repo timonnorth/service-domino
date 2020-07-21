@@ -42,4 +42,33 @@ class Tiles implements \Countable
 
         return $list;
     }
+
+    public function has(Tile $tile): bool
+    {
+        foreach ($this->list as $item) {
+            if ($item->isEqual($tile)) {
+                $res = true;
+                break;
+            }
+        }
+        return $res ?? false;
+    }
+
+    /**
+     * Find and remove Tile. Returns true if was find.
+     *
+     * @param Tile $tile
+     * @return bool
+     */
+    public function remove(Tile $tile): bool
+    {
+        foreach ($this->list as $key => $item) {
+            if ($item->isEqual($tile)) {
+                unset($this->list[$key]);
+                $res = true;
+                break;
+            }
+        }
+        return $res ?? false;
+    }
 }
