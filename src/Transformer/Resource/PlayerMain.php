@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Transformer\Entity;
+namespace Transformer\Resource;
 
 class PlayerMain extends Player
 {
@@ -14,7 +14,7 @@ class PlayerMain extends Player
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'secret' => $this->player->secret,
+            'secret' => $this->object->secret,
         ]);
     }
 }

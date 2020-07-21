@@ -14,6 +14,7 @@ class ApiTest extends TestCase
         $api = new Api($this->getContainer());
         $res = $api->evaluate("new-match", ['rules' => 'basic', 'name' => 'Tiesto', 'players' => 2]);
         self::assertIsArray($res);
-        self::assertEquals('Tiesto', $res['name']);
+        self::assertTrue($res['id'] != '');
+        self::assertEquals('Tiesto', $res['player']['name']);
     }
 }

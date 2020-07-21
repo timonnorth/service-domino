@@ -103,7 +103,7 @@ class Match
         $count = 0;
 
         foreach ($this->players as $player) {
-            if ($player->id != '') {
+            if (!empty($player->id)) {
                 $count++;
             }
         }

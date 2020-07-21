@@ -110,7 +110,7 @@ class Game
 
             if (
                 $this->match->status != Match::STATUS_NEW
-                || $this->match->getCountRegisteredPlayers() >= $this->rules->countMaxPlayers
+                || $this->match->getCountRegisteredPlayers() >= count($this->match->players)
             ) {
                 $result = Result::create(null, gettext("No free slot to register new player"));
             } else {
@@ -120,7 +120,7 @@ class Game
                     // Add player to match and save it.
                     $this->match->registerPlayer($result->getObject());
 
-                    if ($this->match->getCountRegisteredPlayers() >= $this->rules->countMaxPlayers) {
+                    if ($this->match->getCountRegisteredPlayers() >= count($this->match->players)) {
                         // All player slots are completed, let mortal kombat begin.
                         $this->tilesDraw();
                     }
@@ -187,7 +187,7 @@ class Game
             $ind   = rand(0, count($this->match->players) - 1);
             $tiles = $this->match->players[$ind]->tiles->pop();
 
-            $this->match->players[$ind]->marker = true;
+            $this->match->players[$ind]->setMarker($this->match->players);
         }
         //@todo Family step
 
@@ -201,12 +201,13 @@ class Game
 
     /**
      * Checks new player name and also that name is not busy by other players.
+     * Set marker.
      *
      * @param Player[] $existPlayers
      *
      * @return Result Player
      */
-    protected function createPlayer(string $playerName, array $existPlayers = []): Result
+    protected function createPlayer(string $playerName, array &$existPlayers = []): Result
     {
         $player     = Player::create($playerName);
         $validation = $player->selfValidate();
@@ -214,7 +215,7 @@ class Game
         if ($validation !== null) {
             $result = Result::create(null, $validation);
         } else {
-            $result = Result::create($player);
+            $result = Result::create($player->setMarker($existPlayers));
 
             foreach ($existPlayers as $existPlayer) {
                 if ($player->name == $existPlayer->name) {

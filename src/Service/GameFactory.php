@@ -35,12 +35,10 @@ class GameFactory
      */
     public function createByRulesName(string $rulesName): ?Game
     {
-        $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
-
-        if (is_file($filename)) {
+        $rules = $this->loadRules($rulesName);
+        if ($rules) {
             $game              = new Game($this->storage, $this->locker, null);
-            $game->rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
-            $game->rules->name = $rulesName;
+            $game->rules       = $rules;
         } else {
             $game = null;
         }
@@ -63,9 +61,20 @@ class GameFactory
                 $match === null || $match->status != Match::STATUS_NEW && !$match->amIplayer($playerId, $playerSecret)
             ) {
                 // Everybody has access to NEW Match, but only players to another statuses.
-                $result = Result::create(null, gettext('Match not found'));
+                if ($match) {
+                    $message = gettext('No free slot to register new player');
+                } else {
+                    $message = gettext('Match not found');
+                }
+                $result = Result::create(null, $message);
             } else {
-                $result = Result::create(new Game($this->storage, $this->locker, $match));
+                $game = new Game($this->storage, $this->locker, $match);
+                $game->rules = $this->loadRules($match->rules);
+                if (!$game->rules) {
+                    $result = Result::create(null, gettext('Rules not found'));
+                } else {
+                    $result = Result::create($game);
+                }
             }
         } catch (\Exception $e) {
             //@todo Log exception.
@@ -73,5 +82,26 @@ class GameFactory
         }
 
         return $result;
+    }
+
+    /**
+     * Load rules from resources by its name.
+     *
+     * @param string $rulesName
+     * @return Rules|null
+     * @throws \Transformer\Encoder\Exception
+     */
+    protected function loadRules(string $rulesName): ?Rules
+    {
+        $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
+
+        if (is_file($filename)) {
+            $rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
+            $rules->name = $rulesName;
+        } else {
+            $rules = null;
+        }
+
+        return $rules;
     }
 }

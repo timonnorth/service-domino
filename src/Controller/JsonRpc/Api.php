@@ -9,12 +9,15 @@ use Datto\JsonRpc\Exceptions\MethodException;
 use DI\Container;
 use Service\Game;
 use Transformer\Arrayable;
-use Transformer\Entity\Player;
-use Transformer\Entity\PlayerMain;
+use Transformer\Resource\Match;
+use Transformer\Resource\MatchNew;
+use ValueObject\Result;
 
 class Api implements Evaluator
 {
     protected const METHOD_NEW_MATCH = "new-match";
+    protected const METHOD_GET_MATCH = "get-match";
+    protected const METHOD_REGISTER_PLAYER = "register-player";
 
     /** @var Container */
     protected $container;
@@ -43,7 +46,15 @@ class Api implements Evaluator
             switch ($method) {
                 case self::METHOD_NEW_MATCH:
                     $response = $this->startNewMatch($arguments);
-
+                    break;
+                case self::METHOD_GET_MATCH:
+                    $response = $this->getMatch($arguments);
+                    break;
+                case self::METHOD_REGISTER_PLAYER:
+                    $response = $this->registerPlayer($arguments);
+                    break;
+                default:
+                    throw new MethodException();
                     break;
             }
         } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
@@ -53,11 +64,12 @@ class Api implements Evaluator
             throw new ServerErrorException();
         }
 
-        if (!isset($response)) {
-            throw new MethodException();
+        try {
+            return $response->toArray();
+        } catch (\Exception $e) {
+            //@todo Log Serializing.
+            throw new ServerErrorException();
         }
-
-        return $response->toArray();
     }
 
     /**
@@ -83,6 +95,65 @@ class Api implements Evaluator
         }
         $result = $game->startNewMatch($arguments['name'], $arguments['players']);
 
+        return MatchNew::create($this->checkResult($result)->getObject());
+    }
+
+    /**
+     * @param array $arguments
+     * @return Arrayable
+     * @throws ArgumentException
+     */
+    public function getMatch(array $arguments): Arrayable
+    {
+        $game = $this->getGameByArguments($arguments);
+        return Match::create($game->getMatch())->setPlayerId($arguments['playerId'] ?? '');
+    }
+
+    public function registerPlayer(array $arguments): Arrayable
+    {
+        $this->checkRequiredParams(['name'], $arguments);
+        $game = $this->getGameByArguments($arguments);
+        $this->checkResult($game->registerNewPlayer($arguments['name']));
+        return MatchNew::create($game->getMatch());
+    }
+
+    protected function getGameByArguments(array $arguments): Game
+    {
+        $this->checkRequiredParams(['gameId'], $arguments);
+
+        /** @var Result $result */
+        $result = $this->container->get('GameFactory')->createByMatchId(
+            $arguments['gameId'],
+            $arguments['playerId'] ?? '',
+            $arguments['playerSecret'] ?? ''
+        );
+        return $this->checkResult($result)->getObject();
+    }
+
+    /**
+     * Check that arguments has required params and generates ArgumentException if hasn't.
+     *
+     * @throws ArgumentException
+     */
+    protected function checkRequiredParams(array $requires, array $arguments): void
+    {
+        foreach ($requires as $require) {
+            if (!isset($arguments[$require]) || empty($arguments[$require])) {
+                throw new ArgumentException(sprintf(gettext('Param "%s" is undefined'), $require));
+            }
+        }
+    }
+
+    /**
+     * If Result has error (validation or system) - generates corresponding exception.
+     *
+     * @param Result $result
+     * @return Result
+     * @throws ArgumentException
+     * @throws ServerErrorException
+     */
+    protected function checkResult(Result $result): Result
+    {
         if ($result->hasError()) {
             if ($result->isSystemError()) {
                 throw new ServerErrorException();
@@ -90,19 +161,6 @@ class Api implements Evaluator
 
             throw new ArgumentException($result->getError());
         }
-
-        return PlayerMain::create($result->getObject()->players[0]);
-    }
-
-    /**
-     * @throws ArgumentException
-     */
-    protected function checkRequiredParams(array $requires, array $arguments): void
-    {
-        foreach ($requires as $require) {
-            if (!isset($arguments[$require])) {
-                throw new ArgumentException(sprintf(gettext('Param "%s" is undefined'), $require));
-            }
-        }
+        return $result;
     }
 }

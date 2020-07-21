@@ -44,7 +44,7 @@ class GameTest extends TestCase
         self::assertTrue($match->players[0]->id != '');
         self::assertEquals("Tiesto", $match->players[0]->name);
         self::assertTrue($match->players[0]->secret != '');
-        self::assertFalse($match->players[0]->marker);
+        self::assertTrue($match->players[0]->marker);
         self::assertEquals(0, count($match->players[0]->tiles));
         self::assertTrue($match->players[1]->id == '');
 
@@ -99,18 +99,25 @@ class GameTest extends TestCase
         /** @var Game $game */
         $game = $factory->createByRulesName('traditional');
         $game->startNewMatch("Tiesto", 4);
+        self::assertTrue($game->getMatch()->players[0]->marker);
 
         $result = $game->registerNewPlayer("John Smith");
         self::assertFalse($result->hasError());
         self::assertEquals("John Smith", $game->getMatch()->players[1]->name);
+        self::assertFalse($game->getMatch()->players[0]->marker);
+        self::assertTrue($game->getMatch()->players[1]->marker);
 
         $result = $game->registerNewPlayer("Bob");
         self::assertFalse($result->hasError());
         self::assertEquals("Bob", $game->getMatch()->players[2]->name);
+        self::assertFalse($game->getMatch()->players[0]->marker);
+        self::assertFalse($game->getMatch()->players[1]->marker);
+        self::assertTrue($game->getMatch()->players[2]->marker);
 
         $result = $game->registerNewPlayer("Pieter");
         self::assertFalse($result->hasError());
         self::assertEquals("Pieter", $game->getMatch()->players[3]->name);
+        // And we do not know where is marker after.
 
         // No fifth player.
         $result = $game->registerNewPlayer("Cat");
