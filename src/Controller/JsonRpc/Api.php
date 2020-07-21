@@ -90,7 +90,7 @@ class Api implements Evaluator
 
         return PlayerMain::create($result->getObject()->players[0]);
     }
-    
+
 
     /**
      * @param array $requires
