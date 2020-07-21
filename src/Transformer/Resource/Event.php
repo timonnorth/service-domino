@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Transformer\Resource;
 
 use Transformer\Resource\Event\DataFactory;
-use Transformer\Resource\Event\Play;
 
 /**
  * Class Event
@@ -22,10 +21,10 @@ class Event extends ResourceAbstract
     public function toArray(): array
     {
         return [
-            'type' => $this->object->type,
+            'type'      => $this->object->type,
             'createdAt' => $this->object->createdAt,
-            'playerId' => $this->object->playerId,
-            'data' => DataFactory::create($this->object->type, $this->object->data)->toArray()
+            'playerId'  => $this->object->playerId,
+            'data'      => DataFactory::create($this->object->type, $this->object->data)->toArray(),
         ];
     }
 }

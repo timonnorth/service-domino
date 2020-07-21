@@ -48,9 +48,6 @@ class Player
 
     /**
      * Set marker to given player. Check and remove from another players.
-     *
-     * @param array $existPlayers
-     * @return Player
      */
     public function setMarker(array &$existPlayers = []): Player
     {
@@ -58,6 +55,7 @@ class Player
             $existPlayer->marker = false;
         }
         $this->marker = true;
+
         return $this;
     }
 }

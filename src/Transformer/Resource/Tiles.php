@@ -24,21 +24,25 @@ class Tiles extends ResourceAbstract
     public function toArray(): array
     {
         $res = [
-            'count' => $this->object->count()
+            'count' => $this->object->count(),
         ];
+
         if ($this->showList) {
             $list = [];
+
             foreach ($this->object->list as $tile) {
                 $list[] = $this->serializeTile($tile);
             }
             $res['list'] = $list;
         }
+
         return $res;
     }
 
     public function withList(): Tiles
     {
         $this->showList = true;
+
         return $this;
     }
 }

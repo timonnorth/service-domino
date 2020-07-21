@@ -17,18 +17,15 @@ class Collection implements Arrayable
 
     public function __construct(array $objects, ResourceAbstract $resource)
     {
-        $this->objects = $objects;
+        $this->objects  = $objects;
         $this->resource = $resource;
     }
 
     /**
-     *
-     * @param array $objects
-     * @param Object|string $resource
-     * @param \Closure $afterCreate
-     * @return Collection
+     * @param object|string $resource
+     * @param \Closure      $afterCreate
      */
-    public static function create(array $objects, $resource, \Closure $afterCreate = null): Collection
+    public static function create(array $objects, $resource, ?\Closure $afterCreate = null): Collection
     {
         try {
             if (is_string($resource)) {
@@ -37,15 +34,18 @@ class Collection implements Arrayable
         } catch (\Error $e) {
             throw new ResourceException(sprintf('Resource "%s" not found for collection', $resource), 0, $e);
         }
+
         if (!($resource instanceof ResourceAbstract)) {
             throw new ResourceException(sprintf('Class "%s" is not ResourceAbstract', get_class($resource)));
         }
+
         return (new Collection($objects, $resource))->setAfterCreate($afterCreate);
     }
 
     public function toArray(): array
     {
         $data = [];
+
         foreach ($this->objects as $object) {
             if ($this->afterCreate) {
                 // Should use callback for every Resource.
@@ -56,12 +56,14 @@ class Collection implements Arrayable
                 $data[] = $this->resource->setObject($object)->toArray();
             }
         }
+
         return $data;
     }
 
-    public function setAfterCreate(\Closure $afterCreate = null): Collection
+    public function setAfterCreate(?\Closure $afterCreate = null): Collection
     {
         $this->afterCreate = $afterCreate;
+
         return $this;
     }
 }

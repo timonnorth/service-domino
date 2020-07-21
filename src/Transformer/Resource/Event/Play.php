@@ -25,9 +25,9 @@ class Play extends ResourceAbstract
     public function toArray(): array
     {
         return [
-            'tile' => $this->serializeTile($this->object->tile),
+            'tile'     => $this->serializeTile($this->object->tile),
             'position' => $this->object->position,
-            'parent' => $this->serializeTile($this->object->parent)
+            'parent'   => $this->serializeTile($this->object->parent),
         ];
     }
 }

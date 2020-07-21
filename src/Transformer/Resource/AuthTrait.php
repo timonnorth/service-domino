@@ -16,6 +16,7 @@ trait AuthTrait
     public function setPlayerId(string $playerId): ResourceAbstract
     {
         $this->playerId = $playerId;
+
         return $this;
     }
 

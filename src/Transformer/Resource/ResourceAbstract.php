@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Transformer\Resource;
 
 use Transformer\Arrayable;
-use ValueObject\Tile;
 
 abstract class ResourceAbstract implements Arrayable
 {
@@ -20,6 +19,7 @@ abstract class ResourceAbstract implements Arrayable
     public function setObject($object): ResourceAbstract
     {
         $this->object = $object;
+
         return $this;
     }
 }

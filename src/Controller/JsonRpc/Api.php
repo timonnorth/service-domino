@@ -15,8 +15,8 @@ use ValueObject\Result;
 
 class Api implements Evaluator
 {
-    protected const METHOD_NEW_MATCH = "new-match";
-    protected const METHOD_GET_MATCH = "get-match";
+    protected const METHOD_NEW_MATCH       = "new-match";
+    protected const METHOD_GET_MATCH       = "get-match";
     protected const METHOD_REGISTER_PLAYER = "register-player";
 
     /** @var Container */
@@ -46,15 +46,22 @@ class Api implements Evaluator
             switch ($method) {
                 case self::METHOD_NEW_MATCH:
                     $response = $this->startNewMatch($arguments);
+
                     break;
+
                 case self::METHOD_GET_MATCH:
                     $response = $this->getMatch($arguments);
+
                     break;
+
                 case self::METHOD_REGISTER_PLAYER:
                     $response = $this->registerPlayer($arguments);
+
                     break;
+
                 default:
                     throw new MethodException();
+
                     break;
             }
         } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
@@ -99,13 +106,12 @@ class Api implements Evaluator
     }
 
     /**
-     * @param array $arguments
-     * @return Arrayable
      * @throws ArgumentException
      */
     public function getMatch(array $arguments): Arrayable
     {
         $game = $this->getGameByArguments($arguments);
+
         return Match::create($game->getMatch())->setPlayerId($arguments['playerId'] ?? '');
     }
 
@@ -114,6 +120,7 @@ class Api implements Evaluator
         $this->checkRequiredParams(['name'], $arguments);
         $game = $this->getGameByArguments($arguments);
         $this->checkResult($game->registerNewPlayer($arguments['name']));
+
         return MatchNew::create($game->getMatch());
     }
 
@@ -127,6 +134,7 @@ class Api implements Evaluator
             $arguments['playerId'] ?? '',
             $arguments['playerSecret'] ?? ''
         );
+
         return $this->checkResult($result)->getObject();
     }
 
@@ -147,8 +155,6 @@ class Api implements Evaluator
     /**
      * If Result has error (validation or system) - generates corresponding exception.
      *
-     * @param Result $result
-     * @return Result
      * @throws ArgumentException
      * @throws ServerErrorException
      */
@@ -161,6 +167,7 @@ class Api implements Evaluator
 
             throw new ArgumentException($result->getError());
         }
+
         return $result;
     }
 }

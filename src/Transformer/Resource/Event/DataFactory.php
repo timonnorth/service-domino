@@ -11,9 +11,6 @@ use ValueObject\Event;
 class DataFactory
 {
     /**
-     * @param string $type
-     * @param mixed $data
-     * @return ResourceAbstract
      * @throws ResourceException
      */
     public static function create(string $type, $data): ResourceAbstract
@@ -21,11 +18,15 @@ class DataFactory
         switch ($type) {
             case Event::TYPE_PLAY:
                 $res = Play::create($data);
+
                 break;
+
             default:
                 throw new ResourceException(sprintf('Undefined event type "%s"', $type));
+
                 break;
         }
+
         return $res;
     }
 }

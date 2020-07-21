@@ -22,7 +22,7 @@ class Stock extends ResourceAbstract
     {
         return [
             // It never shows list (not Authed).
-            'tiles' => Tiles::create($this->object->tiles)->toArray()
+            'tiles' => Tiles::create($this->object->tiles)->toArray(),
         ];
     }
 }

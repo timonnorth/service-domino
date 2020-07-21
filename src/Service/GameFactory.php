@@ -36,9 +36,10 @@ class GameFactory
     public function createByRulesName(string $rulesName): ?Game
     {
         $rules = $this->loadRules($rulesName);
+
         if ($rules) {
-            $game              = new Game($this->storage, $this->locker, null);
-            $game->rules       = $rules;
+            $game        = new Game($this->storage, $this->locker, null);
+            $game->rules = $rules;
         } else {
             $game = null;
         }
@@ -68,8 +69,9 @@ class GameFactory
                 }
                 $result = Result::create(null, $message);
             } else {
-                $game = new Game($this->storage, $this->locker, $match);
+                $game        = new Game($this->storage, $this->locker, $match);
                 $game->rules = $this->loadRules($match->rules);
+
                 if (!$game->rules) {
                     $result = Result::create(null, gettext('Rules not found'));
                 } else {
@@ -87,8 +89,6 @@ class GameFactory
     /**
      * Load rules from resources by its name.
      *
-     * @param string $rulesName
-     * @return Rules|null
      * @throws \Transformer\Encoder\Exception
      */
     protected function loadRules(string $rulesName): ?Rules

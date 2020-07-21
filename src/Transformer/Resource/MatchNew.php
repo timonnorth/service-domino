@@ -20,18 +20,20 @@ class MatchNew extends ResourceAbstract
     {
         // Should find last registered player.
         $player = null;
+
         for ($i = count($this->object->players) - 1; $i >= 0; $i--) {
             if (!empty($this->object->players[$i]->id)) {
                 $player = PlayerMain::create($this->object->players[$i])->toArray();
+
                 break;
             }
         }
 
         return [
-            'id'     => $this->object->id,
+            'id'        => $this->object->id,
             'createdAt' => $this->object->createdAt,
-            'status' => $this->object->status,
-            'player' => $player
+            'status'    => $this->object->status,
+            'player'    => $player,
         ];
     }
 }

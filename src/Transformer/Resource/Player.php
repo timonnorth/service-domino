@@ -21,12 +21,12 @@ class Player extends ResourceAbstract
     public function toArray(): array
     {
         return [
-            'id' => $this->object->id,
-            'name' => $this->object->name,
+            'id'     => $this->object->id,
+            'name'   => $this->object->name,
             'marker' => $this->object->marker,
-            'tiles' => $this->getPlayerId() == $this->object->id ?
+            'tiles'  => $this->getPlayerId() == $this->object->id ?
                 Tiles::create($this->object->tiles)->withList()->toArray() :
-                Tiles::create($this->object->tiles)->toArray()
+                Tiles::create($this->object->tiles)->toArray(),
         ];
     }
 }
