@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Transformer\Entity;
 
-use Transformer\Arrayable;
-
 class PlayerMain extends Player
 {
     public static function create(\Entity\Player $player): Player
@@ -16,7 +14,7 @@ class PlayerMain extends Player
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'secret' => $this->player->secret
+            'secret' => $this->player->secret,
         ]);
     }
 }

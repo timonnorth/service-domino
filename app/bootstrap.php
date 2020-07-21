@@ -3,8 +3,6 @@
 use Controller\JsonRpc\Api;
 use Datto\JsonRpc\Http\Server;
 use DI\ContainerBuilder;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\SemaphoreStore;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

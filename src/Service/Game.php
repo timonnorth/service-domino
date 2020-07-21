@@ -152,12 +152,15 @@ class Game
     protected function canIPlay(Player $player): bool
     {
         $res = false;
+
         foreach ($player->tiles->list as $tile) {
             if ($this->match->getEdge()->canPlayByTile($tile)) {
                 $res = true;
+
                 break;
             }
         }
+
         return $res;
     }
 

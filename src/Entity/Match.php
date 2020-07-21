@@ -142,6 +142,7 @@ class Match
                 }
             }
         }
+
         return $this->edge;
     }
 

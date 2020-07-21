@@ -9,7 +9,8 @@ class ArgumentException extends \Datto\JsonRpc\Exceptions\ArgumentException
     public function __construct(string $message = '')
     {
         parent::__construct();
-        if ('' != $message) {
+
+        if ($message != '') {
             $this->message = $message;
         }
     }

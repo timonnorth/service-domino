@@ -24,9 +24,9 @@ class Player implements Arrayable
     public function toArray(): array
     {
         return [
-            'id' => $this->player->id,
-            'name' => $this->player->name,
-            'marker' => $this->player->marker
+            'id'     => $this->player->id,
+            'name'   => $this->player->name,
+            'marker' => $this->player->marker,
         ];
     }
 }

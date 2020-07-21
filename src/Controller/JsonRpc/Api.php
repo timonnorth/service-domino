@@ -7,7 +7,6 @@ namespace Controller\JsonRpc;
 use Datto\JsonRpc\Evaluator;
 use Datto\JsonRpc\Exceptions\MethodException;
 use DI\Container;
-use Entity\Match;
 use Service\Game;
 use Transformer\Arrayable;
 use Transformer\Entity\Player;
@@ -27,8 +26,8 @@ class Api implements Evaluator
 
     /**
      * @param string $method
-     * @param array $arguments
-     * @return mixed
+     * @param array  $arguments
+     *
      * @throws ArgumentException
      * @throws MethodException
      * @throws ServerErrorException
@@ -44,6 +43,7 @@ class Api implements Evaluator
             switch ($method) {
                 case self::METHOD_NEW_MATCH:
                     $response = $this->startNewMatch($arguments);
+
                     break;
             }
         } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
@@ -64,7 +64,7 @@ class Api implements Evaluator
      * Returns created main Player.
      *
      * @param $arguments
-     * @return Arrayable
+     *
      * @throws ArgumentException
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
@@ -77,24 +77,24 @@ class Api implements Evaluator
         $factory = $this->container->get('GameFactory');
         /** @var Game $game */
         $game = $factory->createByRulesName($arguments['rules']);
-        if (null == $game) {
+
+        if ($game == null) {
             throw new ArgumentException(gettext('Rules are not valid'));
         }
         $result = $game->startNewMatch($arguments['name'], $arguments['players']);
+
         if ($result->hasError()) {
             if ($result->isSystemError()) {
                 throw new ServerErrorException();
             }
+
             throw new ArgumentException($result->getError());
         }
 
         return PlayerMain::create($result->getObject()->players[0]);
     }
 
-
     /**
-     * @param array $requires
-     * @param array $arguments
      * @throws ArgumentException
      */
     protected function checkRequiredParams(array $requires, array $arguments): void
