@@ -23,7 +23,7 @@ class Score extends ResourceAbstract
     {
         return [
             'tilesLeft' => $this->object->tilesLeft,
-            'score' => $this->object->score
+            'score'     => $this->object->score,
         ];
     }
 }

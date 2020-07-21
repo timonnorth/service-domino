@@ -37,8 +37,8 @@ class Game
     public function __construct(StorageInterface $storage, LockFactory $locker, ?Match $match)
     {
         $this->storage = $storage;
-        $this->locker = $locker;
-        $this->match = $match;
+        $this->locker  = $locker;
+        $this->match   = $match;
 
         if ($this->match !== null) {
             $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
@@ -81,7 +81,7 @@ class Game
                 $result = $playerResult;
             } else {
                 $this->match = Match::create($this->rules, $playerResult->getObject());
-                $result = $this->setCountPlayers($countPlayers);
+                $result      = $this->setCountPlayers($countPlayers);
 
                 if (!$result->hasError()) {
                     $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
@@ -140,18 +140,18 @@ class Game
      * Play (validate) with given Tile.
      * Do not forget to call autoPlay() when success result.
      *
-     * @param Tile $tile
-     * @param string $position
-     * @param string $playerId
-     * @return Result Match
      * @throws Exception
+     *
+     * @return Result Match
      */
     public function play(Tile $tile, string $position, string $playerId): Result
     {
         $result = $this->validatePlayRequest($tile, $position, $playerId);
+
         if (!$result->hasError()) {
             // Your Tile looks ok, let's try to play with it!
             $edge = $this->match->getEdge();
+
             if (!$tile->hasEdge($position == Event\DataPlay::POSITION_RIGHT ? $edge->right : $edge->left)) {
                 $result = Result::create(null, gettext("You can not play by this Tile in this position"));
             } elseif (!$result->getObject()->tiles->remove($tile)) {
@@ -167,6 +167,7 @@ class Game
                     ),
                     $playerId
                 );
+
                 if ($result->getObject()->tiles->count() <= 0) {
                     // We have a winner!
                     $this->finishMatch($result->getObject()->id);
@@ -176,6 +177,7 @@ class Game
                 }
             }
         }
+
         return $result;
     }
 
@@ -190,28 +192,33 @@ class Game
         if ($this->match->status == Match::STATUS_PLAY) {
             while (true) {
                 $player = $this->match->getMarkedPlayer();
+
                 if ($player->isDeadlock()) {
                     // We have locked all players, game over.
                     $this->finishMatch();
+
                     break;
                 }
                 $drawedTiles = [];
+
                 while (!$this->canIPlay($player)) {
                     if ($this->match->stock->count() <= 0) {
                         // Stock is empty and Player still can't play, mark him/her and jump to next.
                         $player->setDeadlock();
                         $this->match->addDrawEvent($drawedTiles, $player->id);
                         $this->match->moveMarker();
+
                         continue 2;
                     }
                     // I do not have Tile to play, let's go to draw from Stock.
-                    $tiles = $this->match->stock->tiles->pop();
+                    $tiles       = $this->match->stock->tiles->pop();
                     $drawedTiles = array_merge($drawedTiles, $tiles);
                     $player->tiles->push($tiles);
                     $changed = true;
                 }
                 //@todo Fix in Event when tiles are open.
                 $this->match->addDrawEvent($drawedTiles, $player->id);
+
                 break;
             }
 
@@ -230,19 +237,21 @@ class Game
 
     /**
      * @todo Must be done in Family.
-     * @return Event\DataScore
      */
     protected function calculateScore(string $playerId): Event\DataScore
     {
         $data = Event\DataScore::create(0, 0);
+
         foreach ($this->match->players as $player) {
             if ($player->id != $playerId) {
                 $data->tilesLeft += $player->tiles->count();
+
                 foreach ($player->tiles->list as $tile) {
                     $data->score += $tile->left + $tile->right;
                 }
             }
         }
+
         return $data;
     }
 
@@ -268,9 +277,6 @@ class Game
     /**
      * Player result means there are no errors and Player can play.
      *
-     * @param Tile $tile
-     * @param string $position
-     * @param string $playerId
      * @return Result Player
      */
     protected function validatePlayRequest(Tile $tile, string $position, string $playerId): Result
@@ -279,6 +285,7 @@ class Game
             $result = Result::create(null, gettext('Match has finished or not started'));
         } else {
             $player = $this->getMatch()->getMarkedPlayer();
+
             if ($player->id != $playerId) {
                 $result = Result::create(null, gettext('Waiting for another Player'));
             } elseif (!$player->tiles->has($tile)) {
@@ -289,6 +296,7 @@ class Game
                 $result = Result::create($player);
             }
         }
+
         return $result;
     }
 
@@ -312,7 +320,7 @@ class Game
     protected function firstStep(): void
     {
         if (true || $this->rules->isFirstMoveRandom) {
-            $ind = rand(0, count($this->match->players) - 1);
+            $ind   = rand(0, count($this->match->players) - 1);
             $tiles = $this->match->players[$ind]->tiles->pop();
 
             $this->match->players[$ind]->setMarker($this->match->players);
@@ -337,7 +345,7 @@ class Game
      */
     protected function createPlayer(string $playerName, array &$existPlayers = []): Result
     {
-        $player = Player::create($playerName);
+        $player     = Player::create($playerName);
         $validation = $player->selfValidate();
 
         if ($validation !== null) {

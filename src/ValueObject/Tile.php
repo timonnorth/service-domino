@@ -41,12 +41,13 @@ class Tile
     public function setRandOrientation(): Tile
     {
         $this->orientation = rand(0, 1);
+
         return $this;
     }
 
     public function isEqual(Tile $tile): bool
     {
-        return $this->left === $tile->left && $this->right == $tile->right
+        return $this->left === $tile->left  && $this->right  == $tile->right
             || $this->left === $tile->right && $this->right == $tile->left;
     }
 
@@ -58,10 +59,11 @@ class Tile
     public function normalize(): Tile
     {
         if ($this->left > $this->right) {
-            $tmp = $this->left;
-            $this->left = $this->right;
+            $tmp         = $this->left;
+            $this->left  = $this->right;
             $this->right = $tmp;
         }
+
         return $this;
     }
 }

@@ -13,9 +13,9 @@ class DataScore
 
     public static function create(int $tilesLeft, int $score): DataScore
     {
-        $data           = new DataScore();
+        $data            = new DataScore();
         $data->tilesLeft = $tilesLeft;
-        $data->score = $score;
+        $data->score     = $score;
 
         return $data;
     }

@@ -19,7 +19,7 @@ class Api implements Evaluator
     protected const METHOD_NEW_MATCH       = "new-match";
     protected const METHOD_GET_MATCH       = "get-match";
     protected const METHOD_REGISTER_PLAYER = "register-player";
-    protected const METHOD_PLAY = "play";
+    protected const METHOD_PLAY            = "play";
 
     /** @var Container */
     protected $container;
@@ -143,14 +143,17 @@ class Api implements Evaluator
     {
         $this->checkRequiredParams(['tile', 'position', 'playerId'], $arguments);
         $game = $this->getGameByArguments($arguments);
-        $this->checkResult($game->play(
-            $this->hydrateTile($arguments),
-            $arguments['position'],
-            $arguments['playerId'])
+        $this->checkResult(
+            $game->play(
+                $this->hydrateTile($arguments),
+                $arguments['position'],
+                $arguments['playerId']
+            )
         );
 
         // Play is successful, we can do autoplay.
         $game->autoPlay();
+
         return Match::create($game->getMatch())->setPlayerId($arguments['playerId'] ?? '');
     }
 
@@ -202,16 +205,16 @@ class Api implements Evaluator
     }
 
     /**
-     * @param array $arguments
-     * @return Tile
      * @throws ArgumentException
      */
     protected function hydrateTile(array $arguments): Tile
     {
         $str = $arguments['tile'] ?? '';
+
         if (!is_string($str) || strlen($str) != 3 || (int)$str[0] > 6 || (int)$str[2] > 6 || $str[1] != ':') {
             throw new ArgumentException(gettext('Tile is not valid, should be in format from "0:0" to "6:6"'));
         }
+
         return Tile::create((int)$str[0], (int)$str[2])->normalize();
     }
 }

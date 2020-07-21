@@ -70,6 +70,7 @@ class Player
     public function setDeadlock(): Player
     {
         $this->deadlock = true;
+
         return $this;
     }
 

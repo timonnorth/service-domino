@@ -12,8 +12,8 @@ use ValueObject\Stock;
 
 class Match
 {
-    public const STATUS_NEW  = 'new';
-    public const STATUS_PLAY = 'play';
+    public const STATUS_NEW      = 'new';
+    public const STATUS_PLAY     = 'play';
     public const STATUS_FINISHED = 'finished';
 
     /** @var string */
@@ -122,7 +122,7 @@ class Match
     public function addDrawEvent(array $tiles, string $playerId): void
     {
         if (count($tiles) > 0) {
-            $this->events[] = Event::create(Event::TYPE_DRAW, Event\DataTiles::create($tiles), $playerId);
+            $this->events[]        = Event::create(Event::TYPE_DRAW, Event\DataTiles::create($tiles), $playerId);
             $this->lastUpdatedHash = Uuid::uuid4()->toString();
         }
     }
@@ -191,21 +191,21 @@ class Match
     {
         switch ($dataPlay->position) {
             case Event\DataPlay::POSITION_LEFT:
-                $this->edge->left = $dataPlay->tile->getOrientedLeft();
+                $this->edge->left     = $dataPlay->tile->getOrientedLeft();
                 $this->edge->tileLeft = $dataPlay->tile;
 
                 break;
 
             case Event\DataPlay::POSITION_RIGHT:
-                $this->edge->right = $dataPlay->tile->getOrientedRight();
+                $this->edge->right     = $dataPlay->tile->getOrientedRight();
                 $this->edge->tileRight = $dataPlay->tile;
 
                 break;
 
             case Event\DataPlay::POSITION_ROOT:
-                $this->edge->left  = $dataPlay->tile->getOrientedLeft();
-                $this->edge->right = $dataPlay->tile->getOrientedRight();
-                $this->edge->tileLeft = $dataPlay->tile;
+                $this->edge->left      = $dataPlay->tile->getOrientedLeft();
+                $this->edge->right     = $dataPlay->tile->getOrientedRight();
+                $this->edge->tileLeft  = $dataPlay->tile;
                 $this->edge->tileRight = $dataPlay->tile;
 
                 break;

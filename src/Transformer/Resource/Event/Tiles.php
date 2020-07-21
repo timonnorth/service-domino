@@ -25,9 +25,11 @@ class Tiles extends ResourceAbstract
     public function toArray(): array
     {
         $list = [];
+
         foreach ($this->object->tiles as $tile) {
             $list[] = $this->serializeTile($tile);
         }
+
         return $list;
     }
 }

@@ -13,8 +13,8 @@ class DataTiles
 
     public static function create(array $tiles): DataTiles
     {
-        $data           = new DataTiles();
-        $data->tiles    = $tiles;
+        $data        = new DataTiles();
+        $data->tiles = $tiles;
 
         return $data;
     }
