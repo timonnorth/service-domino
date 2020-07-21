@@ -10,12 +10,15 @@ use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use ValueObject\Event\DataPlay;
+use ValueObject\Event\DataScore;
 use ValueObject\Result;
+use ValueObject\Rules;
 use ValueObject\Tile;
 
-abstract class GameHelper
+trait GameTrait
 {
-    protected const LOCK_MATCH_TTL = 10;
+    /** @var Rules */
+    public $rules;
     /** @var StorageInterface */
     protected $storage;
     /** @var LockFactory */
@@ -24,6 +27,11 @@ abstract class GameHelper
     protected $match;
     /** @var LockInterface */
     protected $matchLock;
+
+    public function getMatch(): Match
+    {
+        return $this->match;
+    }
 
     protected function finishMatch(string $playerId = ''): void
     {
@@ -35,9 +43,9 @@ abstract class GameHelper
     /**
      * @todo Must be done in Family.
      */
-    protected function calculateScore(string $playerId): Event\DataScore
+    protected function calculateScore(string $playerId): DataScore
     {
-        $data = Event\DataScore::create(0, 0);
+        $data = DataScore::create(0, 0);
 
         foreach ($this->match->players as $player) {
             if ($player->id != $playerId) {

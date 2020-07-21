@@ -6,19 +6,19 @@ namespace Service;
 
 use Entity\Match;
 use Service\Game\Exception;
-use Service\Game\GameHelper;
+use Service\Game\GameTrait;
 use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
-use ValueObject\Event;
 use ValueObject\Event\DataPlay;
 use ValueObject\Result;
 use ValueObject\Rules;
 use ValueObject\Tile;
 
-class Game extends GameHelper
+class Game
 {
-    /** @var Rules */
-    public $rules;
+    use GameTrait;
+
+    protected const LOCK_MATCH_TTL = 10;
 
     /**
      * Game constructor.
@@ -38,11 +38,6 @@ class Game extends GameHelper
     public function __destruct()
     {
         $this->unlockMatch();
-    }
-
-    public function getMatch(): Match
-    {
-        return $this->match;
     }
 
     public function unlockMatch()
