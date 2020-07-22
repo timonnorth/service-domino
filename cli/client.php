@@ -135,6 +135,7 @@ function main()
                     while ($tile == '') {
                         write(sprintf("\nChoose tile (example \"%s\"): ", $me['tiles']['list'][0]));
                         $tile = read();
+
                         if (strlen($tile) == 2) {
                             // Normalize fast input.
                             $tile = $tile[0] . ':' . $tile[1];

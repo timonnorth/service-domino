@@ -17,8 +17,6 @@ use ValueObject\Tile;
  * A tile may only be placed next to another tile, if their respective values on the connecting ends are identical.
  * If a player is unable to place a valid tile, they must keep on pulling tiles from the stock until they can.
  * The game ends when one player wins by playing their last tile.
- *
- * @package Service\Family
  */
 class FamilyBasic implements FamilyInterface
 {
@@ -28,16 +26,15 @@ class FamilyBasic implements FamilyInterface
      * First Tile is always from Stock.
      * Marker to first Player or random.
      *
-     * @param Rules $rules
      * @param Match &$match
-     * @return Tile
      */
     public function firstStep(Rules $rules, Match &$match): Tile
     {
-        $tile = $match->stock->tiles->pop()[0];
-        $player = $rules->isFirstMoveRandom ? $this->getRandomPlayer($match->players) : $match->players[0];
+        $tile           = $match->stock->tiles->pop()[0];
+        $player         = $rules->isFirstMoveRandom ? $this->getRandomPlayer($match->players) : $match->players[0];
         $player->marker = true;
         $this->addFirstPlayEvent($match, $tile, $player->id);
+
         return $tile;
     }
 }

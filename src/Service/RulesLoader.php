@@ -11,13 +11,10 @@ use ValueObject\Rules;
  * Class RulesLoader
  *
  * @todo Refactore do not use local filesystem (DB).
- * @package Service
  */
 class RulesLoader
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $cache = [];
 
     /** @var EncoderInterface */
@@ -39,7 +36,7 @@ class RulesLoader
             $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
 
             if (is_file($filename)) {
-                $rules = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
+                $rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
                 $rules->name = $rulesName;
             } else {
                 $rules = null;

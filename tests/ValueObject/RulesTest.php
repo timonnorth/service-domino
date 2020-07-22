@@ -36,7 +36,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
     public function testUndefinedFamily()
     {
         $rules = Rules::createByParameters([
-            'family'                 => 'test_fam'
+            'family' => 'test_fam',
         ]);
         self::assertEquals('traditional', $rules->family);
         self::assertTrue($rules->getFamily() instanceof FamilyTraditional);

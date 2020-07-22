@@ -126,6 +126,7 @@ class GameTest extends TestCase
 
         // Check count of tiles.
         $markers = 0;
+
         for ($i = 0; $i < 4; $i++) {
             if ($i < 3 && $game->getMatch()->players[$i + 1]->marker || $i == 3 && $game->getMatch()->players[0]->marker) {
                 $expected = 4;
@@ -134,6 +135,7 @@ class GameTest extends TestCase
                 $expected = 5;
             }
             self::assertEquals($expected, $game->getMatch()->players[$i]->tiles->count());
+
             if ($game->getMatch()->players[$i]->marker) {
                 $markers++;
             }

@@ -12,7 +12,6 @@ use ValueObject\Tile;
  * Traditional Domino rules.
  *
  * @see https://en.wikipedia.org/wiki/Dominoes#Rules
- * @package Service\Family
  */
 class FamilyTraditional implements FamilyInterface
 {
@@ -22,38 +21,40 @@ class FamilyTraditional implements FamilyInterface
      * First prio <1:1>, than upper to <6:6>. Tile <0:0> ("naked Vasili") does not play.
      * If nobody has double, smallest Tile plays.
      *
-     * @param Rules $rules
      * @param Match &$match
-     * @return Tile
      */
     public function firstStep(Rules $rules, Match &$match): Tile
     {
         if ($rules->isFirstMoveRandom) {
             $player = $this->getRandomPlayer($match->players);
-            $tile = $player->tiles->pop()[0];
+            $tile   = $player->tiles->pop()[0];
         } else {
             $tile = null;
             // Search first small double.
             for ($i = 1; $i <= 6; $i++) {
                 $double = Tile::create($i, $i);
+
                 foreach ($match->players as $player) {
                     if ($player->tiles->has($double)) {
                         $tile = $double;
+
                         break 2;
                     }
                 }
             }
+
             if (!$tile) {
                 // No doubles. Should calculate minimums.
                 $min = 13;
+
                 foreach ($match->players as $onePlayer) {
                     foreach ($onePlayer->tiles->list as $oneTile) {
                         $score = $oneTile->getScore();
                         // Ignore score for <0:0>
                         if ($score > 0 && $score < $min) {
-                            $min = $score;
+                            $min    = $score;
                             $player = $onePlayer;
-                            $tile = $oneTile;
+                            $tile   = $oneTile;
                         }
                     }
                 }
@@ -62,6 +63,7 @@ class FamilyTraditional implements FamilyInterface
         $player->tiles->remove($tile);
         $player->marker = true;
         $this->addFirstPlayEvent($match, $tile, $player->id);
+
         return $tile;
     }
 }

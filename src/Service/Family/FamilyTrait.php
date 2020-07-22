@@ -22,6 +22,5 @@ trait FamilyTrait
             DataPlay::create($tile->setRandOrientation(), null, DataPlay::POSITION_ROOT),
             $playerId
         );
-
     }
 }
