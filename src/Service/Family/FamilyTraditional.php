@@ -66,4 +66,9 @@ class FamilyTraditional implements FamilyInterface
 
         return $tile;
     }
+
+    public function isDrawingPublic(): bool
+    {
+        return false;
+    }
 }

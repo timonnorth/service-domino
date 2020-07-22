@@ -86,7 +86,7 @@ function main()
                             sprintf('<%s>', $event['data']['parent'])
                         ));
                     } elseif ($event['type'] == 'draw') {
-                        if ($event['data'][0] == '') {
+                        if ($event['data'][0] == '-1:-1') {
                             // For hidden tiles.
                             write(sprintf(
                                 "\n%s can't play, drawing %d tile(s)",

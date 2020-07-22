@@ -48,20 +48,23 @@ class Serializer
     }
 
     /**
-     * @param object $data
+     * @param mixed $data
+     * @return mixed
      */
-    protected function normalizeObject($data): object
+    protected function normalizeObject($data)
     {
-        $data->__cn = get_class($data);
+        if (is_object($data)) {
+            $data->__cn = get_class($data);
 
-        foreach ($data as $key => $value) {
-            if (is_object($value)) {
-                $data->{$key} = $this->normalizeObject($value);
-            } elseif (is_array($value)) {
-                $data->{$key} = [];
+            foreach ($data as $key => $value) {
+                if (is_object($value)) {
+                    $data->{$key} = $this->normalizeObject($value);
+                } elseif (is_array($value)) {
+                    $data->{$key} = [];
 
-                foreach ($value as $keyIn => $valueIn) {
-                    $data->{$key}[$keyIn] = $this->normalizeObject($valueIn);
+                    foreach ($value as $keyIn => $valueIn) {
+                        $data->{$key}[$keyIn] = $this->normalizeObject($valueIn);
+                    }
                 }
             }
         }
@@ -70,9 +73,9 @@ class Serializer
     }
 
     /**
+     * @return array|object
      * @throws HydrateException
      *
-     * @return array|object
      */
     protected function hydrate(array $data, string $classname = '')
     {

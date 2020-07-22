@@ -71,4 +71,12 @@ class Tile
     {
         return $this->left + $this->right;
     }
+
+    public function anonymize(): Tile
+    {
+        $this->left = -1;
+        $this->right = -1;
+        $this->orientation = 0;
+        return $this;
+    }
 }

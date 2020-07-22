@@ -37,4 +37,9 @@ class FamilyBasic implements FamilyInterface
 
         return $tile;
     }
+
+    public function isDrawingPublic(): bool
+    {
+        return true;
+    }
 }
