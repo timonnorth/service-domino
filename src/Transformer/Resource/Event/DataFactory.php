@@ -26,6 +26,11 @@ class DataFactory
 
                 break;
 
+            case Event::TYPE_SKIP:
+                $res = Skip::create();
+
+                break;
+
             case Event::TYPE_WIN:
                 $res = Score::create($data);
 

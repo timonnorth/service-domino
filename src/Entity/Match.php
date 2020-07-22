@@ -118,10 +118,15 @@ class Match
         $this->lastUpdatedHash = Uuid::uuid4()->toString();
     }
 
-    public function addDrawEvent(array $tiles, string $playerId): void
+    public function addDrawEvent(array $tiles, string $playerId, bool $addSkipEvent = false): void
     {
         if (count($tiles) > 0) {
             $this->events[]        = Event::create(Event::TYPE_DRAW, Event\DataTiles::create($tiles), $playerId);
+            $this->lastUpdatedHash = Uuid::uuid4()->toString();
+        }
+
+        if ($addSkipEvent) {
+            $this->events[]        = Event::create(Event::TYPE_SKIP, null, $playerId);
             $this->lastUpdatedHash = Uuid::uuid4()->toString();
         }
     }

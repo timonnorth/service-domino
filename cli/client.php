@@ -65,13 +65,14 @@ function main()
         } else {
             $me = getPlayerById($credentials['playerId'], $match);
             // Show events and status.
-            if (count($match['events']) > $countProceededEvents) {
+            $count = count($match['events']);
+
+            if ($count > $countProceededEvents) {
                 if ($countProceededEvents == 0) {
                     // For very first step.
                     write(sprintf("\nGame starting with first tile: <%s>", $match['events'][0]['data']['tile']));
                     $countProceededEvents++;
                 }
-                $count = count($match['events']);
 
                 for ($i = $countProceededEvents; $i < $count; $i++) {
                     $event = $match['events'][$i];
@@ -105,6 +106,11 @@ function main()
                                 $list
                             ));
                         }
+                    } elseif ($event['type'] == 'skip') {
+                        write(sprintf(
+                            "\n%s can't play and skip his/her move",
+                            getPlayerById($event['playerId'], $match)['name']
+                        ));
                     }
                 }
                 $countProceededEvents = $count;

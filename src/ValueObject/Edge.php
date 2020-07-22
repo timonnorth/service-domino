@@ -23,10 +23,7 @@ class Edge
      */
     public function canPlayByTile(Tile $tile): bool
     {
-        return $tile->left  == $this->left
-            || $tile->right == $this->right
-            || $tile->right == $this->left
-            || $tile->right == $this->right;
+        return $tile->hasEdge($this->left) || $tile->hasEdge($this->right);
     }
 
     /**

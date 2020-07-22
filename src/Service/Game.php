@@ -186,12 +186,13 @@ class Game
                 }
                 $drawedTiles = [];
 
-                while (!$this->canIPlay($player)) {
+                while (!$this->canPlay($player)) {
                     if ($this->match->stock->count() <= 0) {
                         // Stock is empty and Player still can't play, mark him/her and jump to next.
                         $player->setDeadlock();
-                        $this->match->addDrawEvent($drawedTiles, $player->id);
+                        $this->match->addDrawEvent($drawedTiles, $player->id, true);
                         $this->match->moveMarker();
+                        $changed = true;
 
                         continue 2;
                     }

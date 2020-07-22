@@ -64,7 +64,7 @@ trait GameTrait
      * Checks can player play with some Tile on hands.
      * Returns false if player must to keep Tile from Stock (or game should be finished).
      */
-    protected function canIPlay(Player $player): bool
+    protected function canPlay(Player $player): bool
     {
         $res = false;
 
