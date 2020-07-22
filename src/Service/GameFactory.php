@@ -33,7 +33,7 @@ class GameFactory
      */
     public function createByRulesName(string $rulesName): ?Game
     {
-        $rules = $this->rulesLoader->loadRules($rulesName);
+        $rules = $this->rulesLoader->getRules($rulesName);
 
         if ($rules) {
             $game        = new Game($this->storage, $this->locker, null);
@@ -68,7 +68,7 @@ class GameFactory
                 $result = Result::create(null, $message);
             } else {
                 $game        = new Game($this->storage, $this->locker, $match);
-                $game->rules = $this->rulesLoader->loadRules($match->rules);
+                $game->rules = $this->rulesLoader->getRules($match->rules);
 
                 if (!$game->rules) {
                     $result = Result::create(null, gettext('Rules not found'));

@@ -47,8 +47,8 @@ class Tile
 
     public function isEqual(Tile $tile): bool
     {
-        return $this->left === $tile->left  && $this->right  == $tile->right
-            || $this->left === $tile->right && $this->right == $tile->left;
+        return $this->left == $tile->left  && $this->right == $tile->right
+            || $this->left == $tile->right && $this->right == $tile->left;
     }
 
     public function hasEdge(int $edge): bool
@@ -65,5 +65,10 @@ class Tile
         }
 
         return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->left + $this->right;
     }
 }

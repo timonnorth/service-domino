@@ -7,8 +7,19 @@ namespace Service;
 use Transformer\Encoder\EncoderInterface;
 use ValueObject\Rules;
 
+/**
+ * Class RulesLoader
+ *
+ * @todo Refactore do not use local filesystem (DB).
+ * @package Service
+ */
 class RulesLoader
 {
+    /**
+     * @var array
+     */
+    protected $cache = [];
+
     /** @var EncoderInterface */
     protected $encoder;
 
@@ -22,18 +33,21 @@ class RulesLoader
      *
      * @throws \Transformer\Encoder\Exception
      */
-    public function loadRules(string $rulesName): ?Rules
+    public function getRules(string $rulesName): ?Rules
     {
-        $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
+        if (!isset($this->cache[$rulesName])) {
+            $filename = sprintf('%s/resources/rules/%s.json', __APPDIR__, $rulesName);
 
-        if (is_file($filename)) {
-            $rules       = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
-            $rules->name = $rulesName;
-        } else {
-            $rules = null;
+            if (is_file($filename)) {
+                $rules = Rules::createByParameters($this->encoder->decode(file_get_contents($filename)));
+                $rules->name = $rulesName;
+            } else {
+                $rules = null;
+            }
+            $this->cache[$rulesName] = $rules;
         }
 
-        return $rules;
+        return $this->cache[$rulesName];
     }
 
     /**

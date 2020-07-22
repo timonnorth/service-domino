@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace ValueObject;
 
+use Service\Family\FamilyBasic;
+use Service\Family\FamilyInterface;
+use Service\Family\FamilyTraditional;
+
 class Rules
 {
     protected const DEFAULT_NAME                   = "default";
@@ -29,6 +33,12 @@ class Rules
     public $isFirstMoveRandom;
     /** @var Tiles */
     protected $tilesAll;
+    /**
+     * Strategy for Game.
+     *
+     * @var FamilyInterface
+     */
+    protected $familyStrategy;
 
     public static function createByParameters(array $parameters): Rules
     {
@@ -67,6 +77,17 @@ class Rules
         } else {
             $rules->isFirstMoveRandom = false;
         }
+
+        // Create family strategy by its name.
+        $className = sprintf('\Service\Family\Family%s', ucfirst($rules->family));
+        try {
+            $rules->setFamily(new $className);
+        } catch (\Error $e) {
+            // If family name is not valid - traditional has used.
+            $rules->setFamily(new FamilyTraditional());
+            $rules->family = 'traditional';
+        }
+
         // We do not allow to customize tiles in this version.
         return $rules;
     }
@@ -92,6 +113,16 @@ class Rules
         }
 
         return $this->tilesAll;
+    }
+
+    public function getFamily(): FamilyInterface
+    {
+        return $this->familyStrategy;
+    }
+
+    public function setFamily(FamilyInterface $family): void
+    {
+        $this->familyStrategy = $family;
     }
 
     protected function generateDefaultTiles()

@@ -52,7 +52,7 @@ trait GameTrait
                 $data->tilesLeft += $player->tiles->count();
 
                 foreach ($player->tiles->list as $tile) {
-                    $data->score += $tile->left + $tile->right;
+                    $data->score += $tile->getScore();
                 }
             }
         }
@@ -109,33 +109,18 @@ trait GameTrait
      * Draw the tiles for players and activating the Match.
      * And call firstStep().
      */
-    protected function tilesDraw(): void
+    protected function tilesDrawFirstStep(): void
     {
         $countTiles = $this->rules->getCountTilesWhenStart(count($this->match->players));
 
         foreach ($this->match->players as $key => $player) {
             $player->tiles->push($this->match->stock->tiles->pop($countTiles));
+            $player->marker = false;
         }
-        $this->firstStep();
-    }
 
-    /**
-     * Detect player who does first step and do it. Move marker. Set status as "play".
-     */
-    protected function firstStep(): void
-    {
-        if (true || $this->rules->isFirstMoveRandom) {
-            $ind   = rand(0, count($this->match->players) - 1);
-            $tiles = $this->match->players[$ind]->tiles->pop();
+        // Family strategy has also to add first event.
+        $this->rules->getFamily()->firstStep($this->rules, $this->match);
 
-            $this->match->players[$ind]->setMarker($this->match->players);
-        }
-        //@todo Family step
-
-        $this->match->addPlayEvent(
-            DataPlay::create($tiles[0]->setRandOrientation(), null, DataPlay::POSITION_ROOT),
-            $this->match->players[$ind]->id
-        );
         $this->match->status = Match::STATUS_PLAY;
         $this->match->moveMarker();
     }

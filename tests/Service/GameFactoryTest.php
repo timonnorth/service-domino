@@ -18,7 +18,7 @@ class GameFactoryTest extends TestCase
 
         $game = $factory->createByRulesName('basic');
         self::assertEquals('basic', $game->rules->name);
-        self::assertEquals('traditional', $game->rules->family);
+        self::assertEquals('basic', $game->rules->family);
         self::assertEquals(2, $game->rules->countMaxPlayers);
         self::assertEquals(7, $game->rules->countTilesWhenStartDefault);
         self::assertNull($game->rules->countTilesWhenByPlayers);

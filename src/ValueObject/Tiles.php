@@ -57,7 +57,7 @@ class Tiles implements \Countable
     }
 
     /**
-     * Find and remove Tile. Returns true if was find.
+     * Find and remove Tile. Returns true if was found.
      */
     public function remove(Tile $tile): bool
     {

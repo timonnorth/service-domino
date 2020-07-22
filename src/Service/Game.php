@@ -108,7 +108,7 @@ class Game
 
                     if ($this->match->getCountRegisteredPlayers() >= count($this->match->players)) {
                         // All player slots are completed, let mortal kombat begin.
-                        $this->tilesDraw();
+                        $this->tilesDrawFirstStep();
                     }
                     $this->storage->setMatch($this->match);
                 }
