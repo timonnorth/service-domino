@@ -22,5 +22,5 @@ return [
             \DI\get('Logger')
         ),
     'Metrics' => \DI\create(\Infrastructure\Metrics\Metrics::class),
-    'Logger' => \DI\create(Infrastructure\Logger\StubLogger::class),
+    'Logger'  => \DI\create(Infrastructure\Logger\StubLogger::class),
 ];
