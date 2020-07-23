@@ -33,31 +33,11 @@ trait GameTrait
         return $this->match;
     }
 
-    protected function finishMatch(string $playerId = ''): void
+    protected function finishMatch(string $playerId): void
     {
         $this->match->status = Match::STATUS_FINISHED;
-        $this->match->addWinEvent($this->calculateScore($playerId), $playerId);
+        $this->match->addWinEvent($this->rules->getFamily()->calculateScore($playerId, $this->match), $playerId);
         $this->storage->setMatch($this->match);
-    }
-
-    /**
-     * @todo Must be done in Family.
-     */
-    protected function calculateScore(string $playerId): DataScore
-    {
-        $data = DataScore::create(0, 0);
-
-        foreach ($this->match->players as $player) {
-            if ($player->id != $playerId) {
-                $data->tilesLeft += $player->tiles->count();
-
-                foreach ($player->tiles->list as $tile) {
-                    $data->score += $tile->getScore();
-                }
-            }
-        }
-
-        return $data;
     }
 
     /**

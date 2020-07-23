@@ -131,7 +131,7 @@ class Match
         }
     }
 
-    public function addWinEvent(Event\DataScore $data, string $playerId): void
+    public function addWinEvent(?Event\DataScore $data, string $playerId): void
     {
         $this->events[] = Event::create(Event::TYPE_WIN, $data, $playerId);
     }

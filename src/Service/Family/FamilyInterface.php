@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Service\Family;
 
 use Entity\Match;
+use ValueObject\Event\DataScore;
 use ValueObject\Rules;
 use ValueObject\Tile;
 
@@ -26,4 +27,13 @@ interface FamilyInterface
      * If TRUE - everybody can see what Tile(s) Player is drawing.
      */
     public function isDrawingPublic(): bool;
+
+    /**
+     * Family should calculate score (or return NULL for absent scoring).
+     *
+     * @param string $winnerPlayerId
+     * @param Match $match
+     * @return DataScore|null
+     */
+    public function calculateScore(string $winnerPlayerId, Match $match): ?DataScore;
 }

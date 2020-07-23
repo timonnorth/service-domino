@@ -180,7 +180,7 @@ class Game
 
                 if ($player->isDeadlock()) {
                     // We have locked all players, game over.
-                    $this->finishMatch();
+                    $this->finishMatch($player->id);
 
                     break;
                 }
@@ -207,7 +207,6 @@ class Game
                     $player->tiles->push($tiles);
                     $changed = true;
                 }
-                //@todo Fix in Event when tiles are open.
                 $this->match->addDrawEvent($drawedTiles, $player->id);
 
                 break;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Service\Family;
 
 use Entity\Match;
+use ValueObject\Event\DataScore;
 use ValueObject\Rules;
 use ValueObject\Tile;
 
@@ -41,5 +42,10 @@ class FamilyBasic implements FamilyInterface
     public function isDrawingPublic(): bool
     {
         return true;
+    }
+
+    public function calculateScore(string $winnerPlayerId, Match $match): ?DataScore
+    {
+        return null;
     }
 }

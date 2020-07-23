@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Service\Family;
 
 use Entity\Match;
+use Entity\Player;
+use ValueObject\Event\DataScore;
 use ValueObject\Rules;
 use ValueObject\Tile;
 
@@ -22,6 +24,7 @@ class FamilyTraditional implements FamilyInterface
      * If nobody has double, smallest Tile plays.
      *
      * @param Match &$match
+     * @return Tile
      */
     public function firstStep(Rules $rules, Match &$match): Tile
     {
@@ -70,5 +73,43 @@ class FamilyTraditional implements FamilyInterface
     public function isDrawingPublic(): bool
     {
         return false;
+    }
+
+    /**
+     * Plus: all loser players Tiles, if only <0:0> - 25 points.
+     * Minus: winner Tiles (when "fish").
+     *
+     * @param string $winnerPlayerId
+     * @param Match $match
+     * @return DataScore|null
+     */
+    public function calculateScore(string $winnerPlayerId, Match $match): ?DataScore
+    {
+        $data = DataScore::create(0, 0);
+
+        foreach ($match->players as $player) {
+            if ($player->id != $winnerPlayerId) {
+                $data->tilesLeft += $player->tiles->count();
+                $data->score += $this->getPlayerScore($player);
+            } else {
+                $data->score -= $this->getPlayerScore($player);
+            }
+        }
+
+        return $data;
+
+    }
+
+    protected function getPlayerScore(Player $player): int
+    {
+        $score = 0;
+        if ($player->tiles->count() == 1 && $player->tiles->list[0]->isEqual(Tile::create(0, 0))) {
+            $score = 25;
+        } else {
+            foreach ($player->tiles->list as $tile) {
+                $score += $tile->getScore();
+            }
+        }
+        return $score;
     }
 }

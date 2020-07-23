@@ -122,7 +122,10 @@ function main()
                 // Game finished.
                 $event = end($match['events']);
                 write(sprintf("\n\nPlayer %s has won!\n", getPlayerById($event['playerId'], $match)['name']));
-                write(sprintf("Tiles left: %d, Score: %d\n\n", $event['data']['tilesLeft'], $event['data']['score']));
+                if (!empty($event['data'])) {
+                    // Check array because "basic" family game does not have data for scoring.
+                    write(sprintf("Tiles left: %d, Score: %d\n\n", $event['data']['tilesLeft'], $event['data']['score']));
+                }
 
                 break;
             }
@@ -371,10 +374,12 @@ function showBoardStatus(array $me, array $match): void
             write(sprintf(", %s has %d tiles", $player['name'], $player['tiles']['count']));
         }
     }
-    write("\nYour tiles: ");
 
-    foreach ($me['tiles']['list'] as $tile) {
-        write(sprintf("<%s>", $tile));
+    if (count($me['tiles']['list']) > 0) {
+        write("\nYour tiles: ");
+        foreach ($me['tiles']['list'] as $tile) {
+            write(sprintf("<%s>", $tile));
+        }
     }
 }
 

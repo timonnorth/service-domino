@@ -10,20 +10,22 @@ use ValueObject\Event\DataScore;
 /**
  * Class Score
  *
- * @property DataScore $object
+ * @property ?DataScore $object
  */
 class Score extends ResourceAbstract
 {
-    public static function create(DataScore $dataScore): Score
+    public static function create(?DataScore $dataScore): Score
     {
         return new Score($dataScore);
     }
 
     public function toArray(): array
     {
-        return [
-            'tilesLeft' => $this->object->tilesLeft,
-            'score'     => $this->object->score,
-        ];
+        $res = [];
+        if ($this->object) {
+            $res['tilesLeft'] = $this->object->tilesLeft;
+            $res['score'] = $this->object->score;
+        }
+        return $res;
     }
 }
