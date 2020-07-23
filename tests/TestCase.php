@@ -19,6 +19,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
         if (!defined('__APPDIR__')) {
             define('__APPDIR__', realpath(sprintf('%s/..', __DIR__)));
         }
+        define('APP_MATCH_STORAGE', 'filesystem');
+        define('APP_MATCH_STORAGE_DIR', __APPDIR__ . '/tests/tmp/filestorage');
 
         parent::__construct($name, $data, $dataName);
     }

@@ -3,15 +3,14 @@
 return [
     'Serializer' => \DI\create(\Transformer\Serializer::class)
         ->constructor(new \Transformer\Encoder\Json()),
-    'Storage' => \DI\create(\Service\Storage\File::class)
+    'MatchStorage' => \DI\create(\Infrastructure\Persistence\File\MatchRepositoryManager::class)
         ->constructor(
-            \DI\get('Serializer'),
-            sprintf('%s/var/tmp/filestorage', __APPDIR__)
+            \DI\get('Serializer')
         ),
     'GameFactory' => \DI\create(\Service\GameFactory::class)
         ->constructor(
             \DI\get('RulesLoader'),
-            \DI\get('Storage'),
+            \DI\get('MatchStorage'),
             \DI\get('Locker'),
             \DI\get('Metrics')
         ),

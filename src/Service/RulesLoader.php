@@ -10,7 +10,7 @@ use ValueObject\Rules;
 /**
  * Class RulesLoader
  *
- * @todo Refactore do not use local filesystem (DB).
+ * @todo Refactor do not use local filesystem (DB).
  */
 class RulesLoader
 {

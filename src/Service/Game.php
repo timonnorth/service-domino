@@ -10,7 +10,7 @@ use Infrastructure\Metrics\MetricsNames;
 use Infrastructure\Metrics\MetricsTrait;
 use Service\Game\Exception;
 use Service\Game\GameTrait;
-use Service\Storage\StorageInterface;
+use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use ValueObject\Event\DataPlay;
 use ValueObject\Result;
@@ -28,9 +28,13 @@ class Game
      * Game constructor.
      * If Match present it will be locked.
      */
-    public function __construct(StorageInterface $storage, LockFactory $locker, Metrics $metrics, ?Match $match)
-    {
-        $this->storage = $storage;
+    public function __construct(
+        MatchRepositoryInterface $matchRepository,
+        LockFactory $locker,
+        Metrics $metrics,
+        ?Match $match
+    ) {
+        $this->matchRepository = $matchRepository;
         $this->locker  = $locker;
         $this->metrics = $metrics;
         $this->match   = $match;
@@ -76,7 +80,7 @@ class Game
 
                 if (!$result->hasError()) {
                     $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
-                    $this->storage->setMatch($this->match);
+                    $this->matchRepository->setMatch($this->match);
                     $result = Result::create($this->match);
                 }
             }
@@ -116,7 +120,7 @@ class Game
                         // All player slots are completed, let mortal kombat begin.
                         $this->tilesDrawFirstStep();
                     }
-                    $this->storage->setMatch($this->match);
+                    $this->matchRepository->setMatch($this->match);
                 }
             }
         } catch (\Exception $e) {
@@ -171,7 +175,7 @@ class Game
                     $this->finishMatch($result->getObject()->id);
                 } else {
                     $this->match->moveMarker();
-                    $this->storage->setMatch($this->match);
+                    $this->matchRepository->setMatch($this->match);
                 }
             }
         }
@@ -235,7 +239,7 @@ class Game
             }
 
             if (isset($changed) && $changed) {
-                $this->storage->setMatch($this->match);
+                $this->matchRepository->setMatch($this->match);
             }
         }
     }

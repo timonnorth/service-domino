@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Service\Storage;
+namespace Service\Repository;
 
 class Exception extends \Exception
 {

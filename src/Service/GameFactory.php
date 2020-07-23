@@ -8,7 +8,8 @@ use Entity\Match;
 use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
 use Infrastructure\Metrics\MetricsTrait;
-use Service\Storage\StorageInterface;
+use Infrastructure\Persistence\File\MatchRepositoryManager;
+use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use ValueObject\Result;
 
@@ -18,21 +19,28 @@ class GameFactory
 
     /** @var RulesLoader */
     protected $rulesLoader;
-    /** @var StorageInterface */
-    protected $storage;
+    /** @var MatchRepositoryInterface */
+    protected $matchRepository;
     /** @var LockFactory */
     protected $locker;
     /** @var Metrics */
     protected $metrics;
 
+    /**
+     * @param RulesLoader $rulesLoader
+     * @param MatchRepositoryManager $matchRepositoryManager
+     * @param LockFactory $locker
+     * @param Metrics $metrics
+     * @throws Repository\Exception
+     */
     public function __construct(
         RulesLoader $rulesLoader,
-        StorageInterface $storage,
+        MatchRepositoryManager $matchRepositoryManager,
         LockFactory $locker,
         Metrics $metrics
     ) {
         $this->rulesLoader = $rulesLoader;
-        $this->storage     = $storage;
+        $this->matchRepository     = $matchRepositoryManager->getRepository();
         $this->locker      = $locker;
         $this->metrics     = $metrics;
     }
@@ -48,7 +56,7 @@ class GameFactory
         $rules = $this->rulesLoader->getRules($rulesName);
 
         if ($rules) {
-            $game        = new Game($this->storage, $this->locker, $this->metrics, null);
+            $game        = new Game($this->matchRepository, $this->locker, $this->metrics, null);
             $game->rules = $rules;
             $this->metrics->counter(MetricsNames::GAME_CREATED_OK);
         } else {
@@ -68,7 +76,7 @@ class GameFactory
     public function createByMatchId(string $matchId, string $playerId = '', string $playerSecret = ''): Result
     {
         try {
-            $match = $this->storage->getMatch($matchId);
+            $match = $this->matchRepository->getMatch($matchId);
 
             if (
                 $match === null || $match->status != Match::STATUS_NEW && !$match->amIplayer($playerId, $playerSecret)
@@ -81,7 +89,7 @@ class GameFactory
                 }
                 $result = Result::create(null, $message);
             } else {
-                $game        = new Game($this->storage, $this->locker, $this->metrics, $match);
+                $game        = new Game($this->matchRepository, $this->locker, $this->metrics, $match);
                 $game->rules = $this->rulesLoader->getRules($match->rules);
 
                 if (!$game->rules) {

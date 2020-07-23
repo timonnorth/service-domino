@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Service\Storage;
+namespace Infrastructure\Persistence\File;
 
 use Entity\Match;
+use Service\Repository\MatchRepositoryInterface;
 use Transformer\Serializer;
 
-class File implements StorageInterface
+class FileMatchRepository implements MatchRepositoryInterface
 {
     /** @var Serializer */
     protected $serializer;

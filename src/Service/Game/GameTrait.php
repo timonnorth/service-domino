@@ -8,7 +8,7 @@ use Entity\Match;
 use Entity\Player;
 use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
-use Service\Storage\StorageInterface;
+use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use ValueObject\Event\DataPlay;
@@ -20,8 +20,8 @@ trait GameTrait
 {
     /** @var Rules */
     public $rules;
-    /** @var StorageInterface */
-    protected $storage;
+    /** @var MatchRepositoryInterface */
+    protected $matchRepository;
     /** @var LockFactory */
     protected $locker;
     /** @var Match */
@@ -40,7 +40,7 @@ trait GameTrait
     {
         $this->match->status = Match::STATUS_FINISHED;
         $this->match->addWinEvent($this->rules->getFamily()->calculateScore($playerId, $this->match), $playerId);
-        $this->storage->setMatch($this->match);
+        $this->matchRepository->setMatch($this->match);
         $this->metrics->counter(MetricsNames::GAME_FINISHED_MATCH);
     }
 

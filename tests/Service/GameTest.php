@@ -57,7 +57,7 @@ class GameTest extends TestCase
     public function testStartNewMatchRulesUndefined()
     {
         $game = new Game(
-            $this->getContainer()->get('Storage'),
+            $this->getContainer()->get('MatchStorage')->getRepository(),
             $this->getContainer()->get('Locker'),
             $this->getContainer()->get('Metrics'),
             null

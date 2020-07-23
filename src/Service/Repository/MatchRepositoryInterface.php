@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Service\Storage;
+namespace Service\Repository;
 
 use Entity\Match;
 
-interface StorageInterface
+interface MatchRepositoryInterface
 {
     public function getMatch(string $id): ?Match;
 
