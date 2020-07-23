@@ -10,3 +10,4 @@ build.sh
 fix.sh
 tests/tmp/filestorage/
 /var/tmp
+docker-compose.override.yml
