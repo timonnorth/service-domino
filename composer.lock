@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82aa0e63e9730b8fd6e7385a0465f2be",
+    "content-hash": "d1b85c2242852df73764a21f6558c2c7",
     "packages": [
         {
             "name": "brick/math",
@@ -1336,6 +1336,51 @@
                 }
             ],
             "time": "2020-06-27T23:57:46+00:00"
+        },
+        {
+            "name": "m6web/redis-mock",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/M6Web/RedisMock.git",
+                "reference": "1b7a1bcbb63d636b003643e88f785615e0a316bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/M6Web/RedisMock/zipball/1b7a1bcbb63d636b003643e88f785615e0a316bd",
+                "reference": "1b7a1bcbb63d636b003643e88f785615e0a316bd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "atoum/atoum": "master-dev",
+                "predis/predis": "~1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "M6Web\\Component\\RedisMock": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "M6Web",
+                    "email": "opensource@m6web.fr",
+                    "homepage": "http://tech.m6web.fr/"
+                }
+            ],
+            "description": "Library providing a PHP mock for Redis",
+            "keywords": [
+                "mock",
+                "redis"
+            ],
+            "time": "2020-01-08T08:03:01+00:00"
         },
         {
             "name": "mollie/php-coding-standards",
