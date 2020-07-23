@@ -6,16 +6,32 @@
 
 ## Install
 
-Via Composer
+"Composer require" is not available as project is private. To install it locally, please use git:
 
 ``` bash
-$ composer require timonnorth/service-domino
+    git clone https://github.com/timonnorth/service-domino.git
+    cd service-domino
+    cp docker-compose.override.yml.dist docker-compose.override.yml
+    docker-compose up -d
+    docker exec -it service-domino bash -c "composer update --optimize-autoloader"
 ```
 
 ## Testing
 
 ``` bash
-$ composer test
+    docker exec -it service-domino bash -c "composer test"
+```
+
+## Client
+
+``` bash
+    docker exec -it service-domino bash -c "php cli/client.php http://host.docker.internal:8080"
+```
+
+If you have PHP installed on your host (>=7.1) you can start client locally:
+
+``` bash
+    php cli/client.php http://127.0.0.1:8080
 ```
 
 ## Contributing
