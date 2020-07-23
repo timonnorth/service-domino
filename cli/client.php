@@ -122,6 +122,7 @@ function main()
                 // Game finished.
                 $event = end($match['events']);
                 write(sprintf("\n\nPlayer %s has won!\n", getPlayerById($event['playerId'], $match)['name']));
+
                 if (!empty($event['data'])) {
                     // Check array because "basic" family game does not have data for scoring.
                     write(sprintf("Tiles left: %d, Score: %d\n\n", $event['data']['tilesLeft'], $event['data']['score']));
@@ -377,6 +378,7 @@ function showBoardStatus(array $me, array $match): void
 
     if (count($me['tiles']['list']) > 0) {
         write("\nYour tiles: ");
+
         foreach ($me['tiles']['list'] as $tile) {
             write(sprintf("<%s>", $tile));
         }

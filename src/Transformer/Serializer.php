@@ -47,10 +47,6 @@ class Serializer
         return $this->hydrate($data, $classname);
     }
 
-    /**
-     * @param mixed $data
-     * @return mixed
-     */
     protected function normalizeObject($data)
     {
         if (is_object($data)) {
@@ -73,9 +69,9 @@ class Serializer
     }
 
     /**
-     * @return array|object
      * @throws HydrateException
      *
+     * @return array|object
      */
     protected function hydrate(array $data, string $classname = '')
     {

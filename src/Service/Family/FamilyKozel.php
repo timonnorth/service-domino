@@ -16,17 +16,16 @@ use ValueObject\Tile;
  */
 class FamilyKozel extends FamilyTraditional
 {
-
     /**
      * The difference from traditional is that one Tile removes from stock (if presents).
      * Usually 2-3 players play without one Tile and 4 players use all.
      *
      * @param Match &$match
-     * @return Tile
      */
     public function firstStep(Rules $rules, Match &$match): Tile
     {
         $tile = parent::firstStep($rules, $match);
+
         if ($match->stock->count() > 0) {
             $match->stock->tiles->pop();
         }

@@ -197,7 +197,8 @@ class Game
                         continue 2;
                     }
                     // I do not have Tile to play, let's go to draw from Stock.
-                    $tiles       = $this->match->stock->tiles->pop();
+                    $tiles = $this->match->stock->tiles->pop();
+
                     if (!$this->rules->getFamily()->isDrawingPublic()) {
                         // We anonymize drawing Tile.
                         $drawedTiles[] = (clone $tiles[0])->anonymize();

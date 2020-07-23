@@ -10,7 +10,6 @@ use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use ValueObject\Event\DataPlay;
-use ValueObject\Event\DataScore;
 use ValueObject\Result;
 use ValueObject\Rules;
 use ValueObject\Tile;

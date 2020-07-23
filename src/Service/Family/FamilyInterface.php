@@ -30,10 +30,6 @@ interface FamilyInterface
 
     /**
      * Family should calculate score (or return NULL for absent scoring).
-     *
-     * @param string $winnerPlayerId
-     * @param Match $match
-     * @return DataScore|null
      */
     public function calculateScore(string $winnerPlayerId, Match $match): ?DataScore;
 }

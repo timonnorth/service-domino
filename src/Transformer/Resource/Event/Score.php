@@ -22,10 +22,12 @@ class Score extends ResourceAbstract
     public function toArray(): array
     {
         $res = [];
+
         if ($this->object) {
             $res['tilesLeft'] = $this->object->tilesLeft;
-            $res['score'] = $this->object->score;
+            $res['score']     = $this->object->score;
         }
+
         return $res;
     }
 }
