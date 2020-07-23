@@ -42,6 +42,5 @@ class ApiTest extends TestCase
         $this->expectException(ArgumentException::class);
         $this->expectExceptionMessage('Param "gameId" is undefined');
         $api->evaluate("get-match", []);
-
     }
 }

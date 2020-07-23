@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Infrastructure\Logger;
 
-use Controller\JsonRpc\Api;
-use Controller\JsonRpc\ArgumentException;
 use Tests\TestCase;
 
 class StubLoggerTest extends TestCase
