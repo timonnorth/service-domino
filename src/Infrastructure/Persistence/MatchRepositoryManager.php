@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Infrastructure\Persistence\File;
+namespace Infrastructure\Persistence;
 
+use Infrastructure\Persistence\File\FileMatchRepository;
 use Service\Repository\Exception;
 use Service\Repository\MatchRepositoryInterface;
 use Transformer\Serializer;
@@ -28,7 +29,7 @@ class MatchRepositoryManager
     public function getRepository(): MatchRepositoryInterface
     {
         if ($this->repository === null) {
-            $storage = defined('APP_MATCH_STORAGE') ? APP_MATCH_STORAGE : getenv('APP_MATCH_STORAGE');
+            $storage = getenv('APP_MATCH_STORAGE');
 
             if (!$storage) {
                 throw new Exception('Env variable APP_MATCH_STORAGE is not defined');
@@ -37,8 +38,7 @@ class MatchRepositoryManager
 
             switch ($storage) {
                 case self::FILESYSTEM:
-                    $dir = defined('APP_MATCH_STORAGE_DIR') ?
-                        APP_MATCH_STORAGE_DIR : getenv('APP_MATCH_STORAGE_DIR');
+                    $dir = getenv('APP_MATCH_STORAGE_DIR');
 
                     if ($dir == '') {
                         $dir = sprintf('%s/var/tmp/filestorage', __APPDIR__);
@@ -52,13 +52,13 @@ class MatchRepositoryManager
 
                     break;
             }
-            $this->setReposiroty($repository);
+            $this->setRepository($repository);
         }
 
         return $this->repository;
     }
 
-    public function setReposiroty(MatchRepositoryInterface $repository): void
+    public function setRepository(MatchRepositoryInterface $repository): void
     {
         $this->repository = $repository;
     }

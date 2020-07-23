@@ -8,7 +8,7 @@ use Entity\Match;
 use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
 use Infrastructure\Metrics\MetricsTrait;
-use Infrastructure\Persistence\File\MatchRepositoryManager;
+use Infrastructure\Persistence\MatchRepositoryManager;
 use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use ValueObject\Result;

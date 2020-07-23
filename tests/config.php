@@ -3,7 +3,7 @@
 return [
     'Serializer' => \DI\create(\Transformer\Serializer::class)
         ->constructor(new \Transformer\Encoder\Json()),
-    'MatchStorage' => \DI\create(\Infrastructure\Persistence\File\MatchRepositoryManager::class)
+    'MatchStorage' => \DI\create(\Infrastructure\Persistence\MatchRepositoryManager::class)
         ->constructor(
             \DI\get('Serializer')
         ),
