@@ -8,6 +8,7 @@ use Entity\Match;
 use Entity\Player;
 use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
+use Psr\Log\LoggerInterface;
 use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
@@ -30,6 +31,8 @@ trait GameTrait
     protected $matchLock;
     /** @var Metrics */
     protected $metrics;
+    /** @var LoggerInterface */
+    protected $logger;
 
     public function getMatch(): Match
     {

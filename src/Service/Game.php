@@ -8,6 +8,7 @@ use Entity\Match;
 use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
 use Infrastructure\Metrics\MetricsTrait;
+use Psr\Log\LoggerInterface;
 use Service\Game\Exception;
 use Service\Game\GameTrait;
 use Service\Repository\MatchRepositoryInterface;
@@ -32,11 +33,13 @@ class Game
         MatchRepositoryInterface $matchRepository,
         LockFactory $locker,
         Metrics $metrics,
+        LoggerInterface $logger,
         ?Match $match
     ) {
         $this->matchRepository = $matchRepository;
         $this->locker          = $locker;
         $this->metrics         = $metrics;
+        $this->logger          = $logger;
         $this->match           = $match;
 
         if ($this->match !== null) {
@@ -85,7 +88,7 @@ class Game
                 }
             }
         } catch (\Exception $e) {
-            //@todo Log exception.
+            $this->logger->error('Can not start new Match', ['exception' => $e]);
             $result = Result::create(null, gettext($e->getMessage()), true);
         }
 
@@ -124,7 +127,7 @@ class Game
                 }
             }
         } catch (\Exception $e) {
-            //@todo Log exception.
+            $this->logger->error('Can not register new Player', ['exception' => $e]);
             $result = Result::create(null, gettext($e->getMessage()), true);
         }
 

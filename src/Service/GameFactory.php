@@ -9,6 +9,7 @@ use Infrastructure\Metrics\Metrics;
 use Infrastructure\Metrics\MetricsNames;
 use Infrastructure\Metrics\MetricsTrait;
 use Infrastructure\Persistence\MatchRepositoryManager;
+use Psr\Log\LoggerInterface;
 use Service\Repository\MatchRepositoryInterface;
 use Symfony\Component\Lock\LockFactory;
 use ValueObject\Result;
@@ -25,6 +26,8 @@ class GameFactory
     protected $locker;
     /** @var Metrics */
     protected $metrics;
+    /** @var LoggerInterface */
+    protected $logger;
 
     /**
      * @throws Repository\Exception
@@ -33,12 +36,14 @@ class GameFactory
         RulesLoader $rulesLoader,
         MatchRepositoryManager $matchRepositoryManager,
         LockFactory $locker,
-        Metrics $metrics
+        Metrics $metrics,
+        LoggerInterface $logger
     ) {
         $this->rulesLoader     = $rulesLoader;
         $this->matchRepository = $matchRepositoryManager->getRepository();
         $this->locker          = $locker;
         $this->metrics         = $metrics;
+        $this->logger          = $logger;
     }
 
     /**
@@ -52,7 +57,7 @@ class GameFactory
         $rules = $this->rulesLoader->getRules($rulesName);
 
         if ($rules) {
-            $game        = new Game($this->matchRepository, $this->locker, $this->metrics, null);
+            $game        = new Game($this->matchRepository, $this->locker, $this->metrics, $this->logger, null);
             $game->rules = $rules;
             $this->metrics->counter(MetricsNames::GAME_CREATED_OK);
         } else {
@@ -85,7 +90,7 @@ class GameFactory
                 }
                 $result = Result::create(null, $message);
             } else {
-                $game        = new Game($this->matchRepository, $this->locker, $this->metrics, $match);
+                $game        = new Game($this->matchRepository, $this->locker, $this->metrics, $this->logger, $match);
                 $game->rules = $this->rulesLoader->getRules($match->rules);
 
                 if (!$game->rules) {
@@ -95,7 +100,7 @@ class GameFactory
                 }
             }
         } catch (\Exception $e) {
-            //@todo Log exception.
+            $this->logger->error('Can not create Game by MatchId', ['exception' => $e]);
             $result = Result::create(null, gettext($e->getMessage()), true);
         }
 

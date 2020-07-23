@@ -12,10 +12,15 @@ return [
             \DI\get('RulesLoader'),
             \DI\get('MatchStorage'),
             \DI\get('Locker'),
-            \DI\get('Metrics')
+            \DI\get('Metrics'),
+            \DI\get('Logger')
         ),
     'Json'        => \DI\create(\Transformer\Encoder\Json::class),
     'RulesLoader' => \DI\create(\Service\RulesLoader::class)
-        ->constructor(\DI\get('Json')),
+        ->constructor(
+            \DI\get('Json'),
+            \DI\get('Logger')
+        ),
     'Metrics' => \DI\create(\Infrastructure\Metrics\Metrics::class),
+    'Logger' => \DI\create(Infrastructure\Logger\StubLogger::class),
 ];

@@ -14,15 +14,7 @@ class Tiles implements \Countable
         return count($this->list);
     }
 
-    /**
-     * Shuffle all tiles, must be done when game starts.
-     */
-    public function shuffle(): void
-    {
-        //array_rand()
-    }
-
-    public function push(array $tiles)
+    public function push(array $tiles): void
     {
         $this->list = array_merge($this->list, $tiles);
     }
