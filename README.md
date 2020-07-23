@@ -9,7 +9,7 @@
  * **Storage**: implements storing in filesystem and redis, configurable with envs (see: docker-compose.override.yml). When filesystem is used - service can not be shared via servers. Tests always use filesystem-storage.
  * **Rules**: some parameters are configurable, you can create a few new versions of Domino-family just creating new json file in /resources/rules. Potentially can be allowed to Players to create and upload own Rules in future.
  * **Family**: Domino-family is a Strategy to realize some variants of large "list of domino games". Game engine will use one strategy (described in Rules) to do some actions like detect who steps first and how to calculate scores. You can see details in /src/Service/Family.
- * **Logging and Metrics**: logging is not implemented (is @todo) because usually it will be either Monolog or some own complex solution (what is preferable). Example of metrics with counters and gauges presents.
+ * **Logging and Metrics**: Stub Logger included. Can be extended or changed by Monolog or any other Psr3 compatible. Example of metrics with counters and gauges presents.
  * **Transformers and Hydrators**: simple (arrayable) Resources what can be reused in other protocols (like jsonApi etc). Projects does not have hydrators because client's data is not complex and can be easy decoded/validated with jsonrpc engine. For other protocols some hydrators can be implemented. Project also has own "Serializer" what helps encode/decode entities for storing in some repository.  
  * **Api**: for now I implemented only JSONRPC (main reason - speed of developing), potentially projects can have different endpoints for protocols (see Transformers).
  * [Api endpoints](#jsonrpc-endpoints)

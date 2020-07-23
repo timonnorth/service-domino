@@ -84,12 +84,12 @@ class Api implements Evaluator
 
             throw $e;
         } catch (\Exception $e) {
-            //@todo Log.
+            $this->container->get('Logger')->critical($e->getMessage(), ['exception' => $e]);
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_EXCEPTION);
 
             throw new ServerErrorException();
         } catch (\Error $e) {
-            //@todo Log.
+            $this->container->get('Logger')->alert($e->getMessage(), ['exception' => $e]);
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_ERROR);
 
             throw new ServerErrorException();
@@ -99,7 +99,7 @@ class Api implements Evaluator
             $result = $response->toArray();
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_RESPONSE_OK);
         } catch (\Exception $e) {
-            //@todo Log Serializing.
+            $this->container->get('Logger')->alert('Resource serializing error', ['exception' => $e]);
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERIALIZING_ERROR);
 
             throw new ServerErrorException();

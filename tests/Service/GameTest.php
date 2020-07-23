@@ -60,6 +60,7 @@ class GameTest extends TestCase
             $this->getContainer()->get('MatchStorage')->getRepository(),
             $this->getContainer()->get('Locker'),
             $this->getContainer()->get('Metrics'),
+            $this->getContainer()->get('Logger'),
             null
         );
         $matchResult = $game->startNewMatch("Tiesto", 0);

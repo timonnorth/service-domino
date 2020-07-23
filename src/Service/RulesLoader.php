@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Service;
 
+use Psr\Log\LoggerInterface;
 use Transformer\Encoder\EncoderInterface;
 use ValueObject\Rules;
 
@@ -16,11 +17,12 @@ class RulesLoader
 {
     /** @var array */
     protected $cache = [];
-
     /** @var EncoderInterface */
     protected $encoder;
+    /** @var LoggerInterface */
+    protected $logger;
 
-    public function __construct(EncoderInterface $jsonEncoder)
+    public function __construct(EncoderInterface $jsonEncoder, LoggerInterface $logger)
     {
         $this->encoder = $jsonEncoder;
     }
