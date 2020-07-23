@@ -9,7 +9,7 @@
 Via Composer
 
 ``` bash
-$ composer require oitimon/domino
+$ composer require timonnorth/service-domino
 ```
 
 ## Testing
