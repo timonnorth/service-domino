@@ -4,6 +4,27 @@
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
 
+## Ideas, developing
+
+ * **Storage**: implements storing in filesystem and redis, configurable with envs (see: docker-compose.override.yml). When filesystem is used - service can not be shared via servers. Tests always use filesystem-storage.
+ * **Rules**: some parameters are configurable, you can create a few new versions of Domino-family just creating new json file in /resources/rules. Potentially can be allowed to Players to create and upload own Rules in future.
+ * **Family**: Domino-family is a Strategy to realize some variants of large "list of domino games". Game engine will use one strategy (described in Rules) to do some actions like detect who steps first and how to calculate scores. You can see details in /src/Service/Family.
+ * **Logging and Metrics**: logging is not implemented (is @todo) because usually it will be either Monolog or some own complex solution (what is preferable). Example of metrics with counters and gauges presents.
+ * **Transformers and Hydrators**: simple (arrayable) Resources what can be reused in other protocols (like jsonApi etc). Projects does not have hydrators because client's data is not complex and can be easy decoded/validated with jsonrpc engine. For other protocols some hydrators can be implemented. Project also has own "Serializer" what helps encode/decode entities for storing in some repository.  
+ * **Api**: for now I implemented only JSONRPC (main reason - speed of developing), potentially projects can have different endpoints for protocols (see Transformers).
+ * Api endpoints: [php-client](#jsonrpc-endpoints)
+ * **Client**: as it's not very comfortable to play via Postman or other jsonrpc client (but is absolutely possible!) I created very simple [php-client](#client) to play in console mode. It does not have tests and code styling (just large spaghetti in one file) because I do not consider it as part on this assignment, please do not judge it ^_^. It uses plain-php and jsonrpc-client lib. Otherwise it shows how easy is to create client-app when you have good api.
+
+## Libraries
+
+I used a few libs to not invent a "bike":
+
+ * datto/json-rpc: to use jsonrpc protocol for simple api;
+ * php-di/php-di: DI container implementation;
+ * symfony/lock: simple lock manager;
+ * ramsey/uuid: to generate UUID4 identifiers;
+ * predis/predis: Redis client, uses in Locks and MatchRepository to save game's data. 
+
 ## Install
 
 "Composer require" is not available as project is private. To install it locally, please use git:
@@ -16,6 +37,8 @@
     docker exec -it service-domino bash -c "composer update --optimize-autoloader"
 ```
 
+Potentially we do not need start "composer update" on prod or test environment. But locally (see docker-compose.override.yml) we connect our local folder with code to have the possibility change code and see results "on the fly". That's why composer should be called again.
+
 ## Testing
 
 ``` bash
@@ -23,6 +46,8 @@
 ```
 
 ## Client
+
+You can start client of game on one or few hosts by command "php cli/client.php HTTP://SERVER". It's checked that it works with [ngrock](https://ngrok.com/) and Players can join the Game worldwide when you start Server side via docker.
 
 ``` bash
     docker exec -it service-domino bash -c "php cli/client.php http://host.docker.internal:8080"
@@ -34,13 +59,113 @@ If you have PHP installed on your host (>=7.1) you can start client locally:
     php cli/client.php http://127.0.0.1:8080
 ```
 
-## Contributing
+## JSONRPC endpoints:
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details.
+1. Show list of rules.
+    
+    Request:
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "method": "rules"
+}
+```
+   Response: 
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "result": [
+        "basic",
+        "kozel",
+        "traditional"
+    ]
+}
+```
 
-## Security
+2. Create new Match (game).
 
-If you discover any security related issues, please email oitimon@example.com instead of using the issue tracker.
+    Request:
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "method": "new-match",
+    "params": {
+        "name": "John Smith",
+        "players": 4,
+        "rules": "traditional"
+    }
+}
+```
+   Response:
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "result": {
+        "id": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
+        "createdAt": 1595525983,
+        "status": "new",
+        "player": {
+            "id": "e54b6f84-b76c-48b7-8c06-26e8645a5e8e",
+            "name": "John Smith",
+            "marker": true,
+            "tiles": {
+                "count": 0
+            },
+            "secret": "dec6fcd8-d4ea-4401-a608-b61f820afc00"
+        }
+    }
+}
+```
+
+3. Join the Match:
+
+    Request:
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "method": "register-player",
+    "params": {
+        "gameId": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
+        "name": "Bobby Smart"
+    }
+}
+```
+   Response:
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "result": {
+        "id": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
+        "createdAt": 1595525983,
+        "status": "play",
+        "player": {
+            "id": "170553a6-9aa1-495d-b887-a71c1b7c205f",
+            "name": "Bobby Smart",
+            "marker": true,
+            "tiles": {
+                "count": 7
+            },
+            "secret": "4a0201a5-315e-4856-8f09-ad184806e4c4"
+        }
+    }
+}
+```
+
+    
+    
+
+
+
+```json
+
+```
+ 
 
 ## Credits
 
