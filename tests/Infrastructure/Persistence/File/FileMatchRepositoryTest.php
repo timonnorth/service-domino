@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Infrastructure\Persistance\File;
+namespace Tests\Infrastructure\Persistence\File;
 
 use Entity\Match;
 use Ramsey\Uuid\Uuid;
