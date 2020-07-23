@@ -5,7 +5,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $finder = Finder::create()
-    ->name('.php_cs') // Fix this file as well
+    ->name('.php_cs')
     ->in(__DIR__);
 
 return Config::create()
