@@ -21,26 +21,26 @@ class FileMatchRepository implements MatchRepositoryInterface
         $this->folder     = $folder;
     }
 
-    public function getMatch(string $id): ?Match
+    public function load(string $id): ?Match
     {
         $match    = null;
         $filename = $this->formatMatchFilename($id);
 
         if ($id != '' && is_file($filename)) {
-            $match = $this->deserializeMatch(file_get_contents($filename));
+            $match = $this->deserialize(file_get_contents($filename));
         }
 
         return $match;
     }
 
-    public function setMatch(Match $match): void
+    public function save(Match $match): void
     {
         if ($match->id != '') {
             file_put_contents($this->formatMatchFilename($match->id), $this->serializer->serialize($match));
         }
     }
 
-    protected function deserializeMatch(string $data): ?Match
+    protected function deserialize(string $data): ?Match
     {
         $match = null;
 

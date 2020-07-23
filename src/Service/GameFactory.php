@@ -72,7 +72,7 @@ class GameFactory
     public function createByMatchId(string $matchId, string $playerId = '', string $playerSecret = ''): Result
     {
         try {
-            $match = $this->matchRepository->getMatch($matchId);
+            $match = $this->matchRepository->load($matchId);
 
             if (
                 $match === null || $match->status != Match::STATUS_NEW && !$match->amIplayer($playerId, $playerSecret)

@@ -20,9 +20,9 @@ class FileMatchRepositoryTest extends TestCase
         $match->id    = Uuid::uuid4()->toString();
         $match->rules = "basicTest";
 
-        $storage->setMatch($match);
+        $storage->save($match);
 
-        $match2 = $storage->getMatch($match->id);
+        $match2 = $storage->load($match->id);
         self::assertEquals($match->id, $match2->id);
         self::assertEquals('basicTest', $match2->rules);
     }

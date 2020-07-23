@@ -80,7 +80,7 @@ class Game
 
                 if (!$result->hasError()) {
                     $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
-                    $this->matchRepository->setMatch($this->match);
+                    $this->matchRepository->save($this->match);
                     $result = Result::create($this->match);
                 }
             }
@@ -120,7 +120,7 @@ class Game
                         // All player slots are completed, let mortal kombat begin.
                         $this->tilesDrawFirstStep();
                     }
-                    $this->matchRepository->setMatch($this->match);
+                    $this->matchRepository->save($this->match);
                 }
             }
         } catch (\Exception $e) {
@@ -175,7 +175,7 @@ class Game
                     $this->finishMatch($result->getObject()->id);
                 } else {
                     $this->match->moveMarker();
-                    $this->matchRepository->setMatch($this->match);
+                    $this->matchRepository->save($this->match);
                 }
             }
         }
@@ -239,7 +239,7 @@ class Game
             }
 
             if (isset($changed) && $changed) {
-                $this->matchRepository->setMatch($this->match);
+                $this->matchRepository->save($this->match);
             }
         }
     }

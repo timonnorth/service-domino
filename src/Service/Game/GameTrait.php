@@ -40,7 +40,7 @@ trait GameTrait
     {
         $this->match->status = Match::STATUS_FINISHED;
         $this->match->addWinEvent($this->rules->getFamily()->calculateScore($playerId, $this->match), $playerId);
-        $this->matchRepository->setMatch($this->match);
+        $this->matchRepository->save($this->match);
         $this->metrics->counter(MetricsNames::GAME_FINISHED_MATCH);
     }
 

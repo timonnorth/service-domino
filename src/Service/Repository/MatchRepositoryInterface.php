@@ -8,7 +8,7 @@ use Entity\Match;
 
 interface MatchRepositoryInterface
 {
-    public function getMatch(string $id): ?Match;
+    public function load(string $id): ?Match;
 
-    public function setMatch(Match $match): void;
+    public function save(Match $match): void;
 }
