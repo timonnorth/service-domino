@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Infrastructure\Persistence;
 
 use Infrastructure\Persistence\File\FileMatchRepository;
+use Infrastructure\Persistence\Redis\RedisMatchRepository;
 use Service\Repository\Exception;
 use Service\Repository\MatchRepositoryInterface;
 use Transformer\Serializer;
@@ -12,6 +13,7 @@ use Transformer\Serializer;
 class MatchRepositoryManager
 {
     protected const FILESYSTEM = 'filesystem';
+    protected const REDIS = 'redis';
 
     /** @var Serializer */
     protected $serializer;
@@ -45,6 +47,14 @@ class MatchRepositoryManager
                     }
                     $repository = new FileMatchRepository($this->serializer, $dir);
 
+                    break;
+
+                case self::REDIS:
+                    $repository = new RedisMatchRepository(
+                        $this->serializer,
+                        new \Predis\Client(getenv('APP_REDIS_PARAMS')),
+                        (string)getenv('APP_MATCH_STORAGE_PREFIX')
+                    );
                     break;
 
                 default:

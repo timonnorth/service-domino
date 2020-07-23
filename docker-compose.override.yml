@@ -22,7 +22,7 @@ services:
     volumes:
       - .:/code
     environment:
-      - APP_MATCH_STORAGE=Filesystem
+      - APP_MATCH_STORAGE=Redis
       - APP_REDIS_PARAMS=tcp://host.docker.internal:6379
     networks:
       - code-network

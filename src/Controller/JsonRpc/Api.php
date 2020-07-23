@@ -83,7 +83,7 @@ class Api implements Evaluator
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_REQUEST_ERROR);
 
             throw $e;
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             //@todo Log.
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_EXCEPTION);
 
@@ -92,7 +92,7 @@ class Api implements Evaluator
             //@todo Log.
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_ERROR);
 
-            throw new ServerErrorException();
+            throw new ServerErrorException();*/
         }
 
         try {

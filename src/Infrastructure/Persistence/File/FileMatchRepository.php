@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Infrastructure\Persistence\File;
 
 use Entity\Match;
-use Service\Repository\MatchRepositoryInterface;
+use Infrastructure\Persistence\MatchRepositoryAbstract;
 use Transformer\Serializer;
 
-class FileMatchRepository implements MatchRepositoryInterface
+class FileMatchRepository extends MatchRepositoryAbstract
 {
-    /** @var Serializer */
-    protected $serializer;
     /** @var string */
     protected $folder;
 
@@ -24,7 +22,7 @@ class FileMatchRepository implements MatchRepositoryInterface
     public function load(string $id): ?Match
     {
         $match    = null;
-        $filename = $this->formatMatchFilename($id);
+        $filename = $this->formatFilename($id);
 
         if ($id != '' && is_file($filename)) {
             $match = $this->deserialize(file_get_contents($filename));
@@ -33,30 +31,18 @@ class FileMatchRepository implements MatchRepositoryInterface
         return $match;
     }
 
+    /**
+     * @param Match $match
+     * @throws \Transformer\Encoder\Exception
+     */
     public function save(Match $match): void
     {
         if ($match->id != '') {
-            file_put_contents($this->formatMatchFilename($match->id), $this->serializer->serialize($match));
+            file_put_contents($this->formatFilename($match->id), $this->serializer->serialize($match));
         }
     }
 
-    protected function deserialize(string $data): ?Match
-    {
-        $match = null;
-
-        if ($data !== false && $data != '') {
-            $match = $this->serializer->deserialize($data);
-
-            if (!($match instanceof Match)) {
-                // Do not generate error, just ignore not correct value.
-                $match = null;
-            }
-        }
-
-        return $match;
-    }
-
-    protected function formatMatchFilename(string $id): string
+    protected function formatFilename(string $id): string
     {
         return sprintf('%s/match-%s', $this->folder, $id);
     }
