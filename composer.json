@@ -51,7 +51,7 @@
             "dev-master": "1.0-dev"
         }
     },
-    "minimum-stability": "v0.1.0",
+    "minimum-stability": "stable",
     "config": {
         "sort-packages": true
     }
