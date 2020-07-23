@@ -12,9 +12,11 @@ return [
         ->constructor(
             \DI\get('RulesLoader'),
             \DI\get('Storage'),
-            \DI\get('Locker')
+            \DI\get('Locker'),
+            \DI\get('Metrics')
         ),
     'Json'        => \DI\create(\Transformer\Encoder\Json::class),
     'RulesLoader' => \DI\create(\Service\RulesLoader::class)
         ->constructor(\DI\get('Json')),
+    'Metrics' => \DI\create(\Infrastructure\Metrics\Metrics::class)
 ];

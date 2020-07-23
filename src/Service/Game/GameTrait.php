@@ -6,6 +6,8 @@ namespace Service\Game;
 
 use Entity\Match;
 use Entity\Player;
+use Infrastructure\Metrics\Metrics;
+use Infrastructure\Metrics\MetricsNames;
 use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
@@ -26,6 +28,8 @@ trait GameTrait
     protected $match;
     /** @var LockInterface */
     protected $matchLock;
+    /** @var Metrics */
+    protected $metrics;
 
     public function getMatch(): Match
     {
@@ -37,6 +41,7 @@ trait GameTrait
         $this->match->status = Match::STATUS_FINISHED;
         $this->match->addWinEvent($this->rules->getFamily()->calculateScore($playerId, $this->match), $playerId);
         $this->storage->setMatch($this->match);
+        $this->metrics->counter(MetricsNames::GAME_FINISHED_MATCH);
     }
 
     /**

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Service;
 
 use Entity\Match;
+use Infrastructure\Metrics\Metrics;
+use Infrastructure\Metrics\MetricsNames;
+use Infrastructure\Metrics\MetricsTrait;
 use Service\Game\Exception;
 use Service\Game\GameTrait;
 use Service\Storage\StorageInterface;
@@ -16,7 +19,7 @@ use ValueObject\Tile;
 
 class Game
 {
-    use GameTrait;
+    use GameTrait, MetricsTrait;
 
     protected const LOCK_MATCH_TTL = 10;
 
@@ -24,10 +27,11 @@ class Game
      * Game constructor.
      * If Match present it will be locked.
      */
-    public function __construct(StorageInterface $storage, LockFactory $locker, ?Match $match)
+    public function __construct(StorageInterface $storage, LockFactory $locker, Metrics $metrics, ?Match $match)
     {
         $this->storage = $storage;
         $this->locker  = $locker;
+        $this->metrics = $metrics;
         $this->match   = $match;
 
         if ($this->match !== null) {
@@ -67,6 +71,7 @@ class Game
             } else {
                 $this->match = Match::create($this->rules, $playerResult->getObject());
                 $result      = $this->setCountPlayers($countPlayers);
+                $this->metrics->gauge(MetricsNames::GAME_PLAYERS_IN_MATCH, $countPlayers);
 
                 if (!$result->hasError()) {
                     $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
@@ -118,6 +123,12 @@ class Game
             $result = Result::create(null, gettext($e->getMessage()), true);
         }
 
+        $this->metrics->counter($this->getMetricsNameByResult(
+            $result,
+            MetricsNames::GAME_REGISTER_PLAYER_OK,
+            MetricsNames::GAME_REGISTER_PLAYER_PROBLEM,
+            MetricsNames::GAME_REGISTER_PLAYER_ERROR)
+        );
         return $result;
     }
 
@@ -163,6 +174,12 @@ class Game
             }
         }
 
+        $this->metrics->counter($this->getMetricsNameByResult(
+            $result,
+            MetricsNames::GAME_PLAY_OK,
+            MetricsNames::GAME_PLAY_PROBLEM,
+            MetricsNames::GAME_PLAY_ERROR)
+        );
         return $result;
     }
 
@@ -181,6 +198,7 @@ class Game
                 if ($player->isDeadlock()) {
                     // We have locked all players, game over.
                     $this->finishMatch($player->id);
+                    $this->metrics->counter(MetricsNames::GAME_FINISHED_MATCH_FISH);
 
                     break;
                 }

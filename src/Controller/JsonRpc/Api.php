@@ -7,6 +7,7 @@ namespace Controller\JsonRpc;
 use Datto\JsonRpc\Evaluator;
 use Datto\JsonRpc\Exceptions\MethodException;
 use DI\Container;
+use Infrastructure\Metrics\MetricsNames;
 use Service\Game;
 use Transformer\Arrayable;
 use Transformer\Resource\ArrayList;
@@ -79,21 +80,27 @@ class Api implements Evaluator
                     break;
             }
         } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
+            $this->container->get('Metrics')->counter(MetricsNames::JSON_API_REQUEST_ERROR);
             throw $e;
         } catch (\Exception $e) {
             //@todo Log.
+            $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_EXCEPTION);
             throw new ServerErrorException();
         } catch (\Error $e) {
             //@todo Log.
+            $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_ERROR);
             throw new ServerErrorException();
         }
 
         try {
-            return $response->toArray();
+            $result = $response->toArray();
+            $this->container->get('Metrics')->counter(MetricsNames::JSON_API_RESPONSE_OK);
         } catch (\Exception $e) {
             //@todo Log Serializing.
+            $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERIALIZING_ERROR);
             throw new ServerErrorException();
         }
+        return $result;
     }
 
     protected function rules(): Arrayable

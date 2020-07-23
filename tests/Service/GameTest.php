@@ -56,7 +56,12 @@ class GameTest extends TestCase
 
     public function testStartNewMatchRulesUndefined()
     {
-        $game        = new Game($this->getContainer()->get('Storage'), $this->getContainer()->get('Locker'), null);
+        $game        = new Game(
+            $this->getContainer()->get('Storage'),
+            $this->getContainer()->get('Locker'),
+            $this->getContainer()->get('Metrics'),
+            null
+        );
         $matchResult = $game->startNewMatch("Tiesto", 0);
         self::assertTrue($matchResult->hasError());
         self::assertTrue($matchResult->isSystemError());

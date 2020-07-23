@@ -5,24 +5,32 @@ declare(strict_types=1);
 namespace Service;
 
 use Entity\Match;
+use Infrastructure\Metrics\Metrics;
+use Infrastructure\Metrics\MetricsNames;
+use Infrastructure\Metrics\MetricsTrait;
 use Service\Storage\StorageInterface;
 use Symfony\Component\Lock\LockFactory;
 use ValueObject\Result;
 
 class GameFactory
 {
+    use MetricsTrait;
+
     /** @var RulesLoader */
     protected $rulesLoader;
     /** @var StorageInterface */
     protected $storage;
     /** @var LockFactory */
     protected $locker;
+    /** @var Metrics */
+    protected $metrics;
 
-    public function __construct(RulesLoader $rulesLoader, StorageInterface $storage, LockFactory $locker)
+    public function __construct(RulesLoader $rulesLoader, StorageInterface $storage, LockFactory $locker, Metrics $metrics)
     {
         $this->rulesLoader = $rulesLoader;
         $this->storage     = $storage;
         $this->locker      = $locker;
+        $this->metrics     = $metrics;
     }
 
     /**
@@ -36,10 +44,12 @@ class GameFactory
         $rules = $this->rulesLoader->getRules($rulesName);
 
         if ($rules) {
-            $game        = new Game($this->storage, $this->locker, null);
+            $game        = new Game($this->storage, $this->locker, $this->metrics, null);
             $game->rules = $rules;
+            $this->metrics->counter(MetricsNames::GAME_CREATED_OK);
         } else {
             $game = null;
+            $this->metrics->counter(MetricsNames::GAME_CREATE_VALIDATION);
         }
 
         return $game;
@@ -67,7 +77,7 @@ class GameFactory
                 }
                 $result = Result::create(null, $message);
             } else {
-                $game        = new Game($this->storage, $this->locker, $match);
+                $game        = new Game($this->storage, $this->locker, $this->metrics, $match);
                 $game->rules = $this->rulesLoader->getRules($match->rules);
 
                 if (!$game->rules) {
@@ -81,6 +91,12 @@ class GameFactory
             $result = Result::create(null, gettext($e->getMessage()), true);
         }
 
+        $this->metrics->counter($this->getMetricsNameByResult(
+            $result,
+            MetricsNames::GAME_GET_OK,
+            MetricsNames::GAME_GET_PROBLEM,
+            MetricsNames::GAME_GET_ERROR)
+        );
         return $result;
     }
 }
