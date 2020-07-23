@@ -117,7 +117,7 @@ trait GameTrait
      *
      * @return Result Player
      */
-    protected function createPlayer(string $playerName, array &$existPlayers = []): Result
+    protected function createPlayer(string $playerName, array $existPlayers = []): Result
     {
         $player     = Player::create($playerName);
         $validation = $player->selfValidate();

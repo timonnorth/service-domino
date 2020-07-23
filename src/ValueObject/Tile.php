@@ -40,15 +40,15 @@ class Tile
 
     public function setRandOrientation(): Tile
     {
-        $this->orientation = rand(0, 1);
+        $this->orientation = random_int(0, 1);
 
         return $this;
     }
 
     public function isEqual(Tile $tile): bool
     {
-        return $this->left == $tile->left  && $this->right == $tile->right
-            || $this->left == $tile->right && $this->right == $tile->left;
+        return ($this->left == $tile->left && $this->right == $tile->right)
+            || ($this->left == $tile->right && $this->right == $tile->left);
     }
 
     public function hasEdge(int $edge): bool

@@ -75,7 +75,7 @@ class GameFactory
             $match = $this->matchRepository->load($matchId);
 
             if (
-                $match === null || $match->status != Match::STATUS_NEW && !$match->amIplayer($playerId, $playerSecret)
+                $match === null || ($match->status != Match::STATUS_NEW && !$match->amIplayer($playerId, $playerSecret))
             ) {
                 // Everybody has access to NEW Match, but only players to another statuses.
                 if ($match) {

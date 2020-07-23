@@ -21,7 +21,7 @@ interface FamilyInterface
     /**
      * Returns Tail for first move. Tail should be selected according to Family's strategy.
      */
-    public function firstStep(Rules $rules, Match &$match): Tile;
+    public function firstStep(Rules $rules, Match $match): Tile;
 
     /**
      * If TRUE - everybody can see what Tile(s) Player is drawing.

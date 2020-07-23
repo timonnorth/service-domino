@@ -33,8 +33,8 @@ class Edge
     {
         if (
             $tile->left != $tile->right
-            && ($position == DataPlay::POSITION_LEFT && $tile->left == $this->left
-                || $position == DataPlay::POSITION_RIGHT && $tile->right == $this->right)
+            && (($position == DataPlay::POSITION_LEFT && $tile->left == $this->left)
+                || ($position == DataPlay::POSITION_RIGHT && $tile->right == $this->right))
         ) {
             $tile->orientation = 1;
         } else {
