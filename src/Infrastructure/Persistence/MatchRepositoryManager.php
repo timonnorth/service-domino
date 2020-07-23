@@ -13,7 +13,7 @@ use Transformer\Serializer;
 class MatchRepositoryManager
 {
     protected const FILESYSTEM = 'filesystem';
-    protected const REDIS = 'redis';
+    protected const REDIS      = 'redis';
 
     /** @var Serializer */
     protected $serializer;
@@ -55,6 +55,7 @@ class MatchRepositoryManager
                         new \Predis\Client(getenv('APP_REDIS_PARAMS')),
                         (string)getenv('APP_MATCH_STORAGE_PREFIX')
                     );
+
                     break;
 
                 default:

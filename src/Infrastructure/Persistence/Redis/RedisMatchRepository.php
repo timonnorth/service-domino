@@ -14,12 +14,11 @@ class RedisMatchRepository extends MatchRepositoryAbstract
 {
     /**
      * We do not want to store matches forever, so let it be ne week.
+     *
      * @todo Can be configurable later.
      */
     protected const TTL = 604800;
-    /**
-     * Delay in milliseconds
-     */
+    /** Delay in milliseconds */
     protected const SAVE_DELAY = 300;
 
     /** @var Client */
@@ -40,7 +39,6 @@ class RedisMatchRepository extends MatchRepositoryAbstract
     }
 
     /**
-     * @param Match $match
      * @throws \Transformer\Encoder\Exception
      * @throws Exception
      */
@@ -48,12 +46,18 @@ class RedisMatchRepository extends MatchRepositoryAbstract
     {
         if ($match->id != '') {
             for ($i = 1; $i <= 5; $i++) {
-                $res = $this->client->setex($this->formatKey($match->id), self::TTL, $this->serializer->serialize($match));
+                $res = $this->client->setex(
+                    $this->formatKey($match->id),
+                    self::TTL,
+                    $this->serializer->serialize($match)
+                );
+
                 if ($res) {
                     break;
                 }
                 usleep(self::SAVE_DELAY * 1000);
             }
+
             if (!$res) {
                 throw new Exception("Can not save Match in Redis");
             }

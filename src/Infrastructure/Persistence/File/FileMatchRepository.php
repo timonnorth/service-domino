@@ -32,7 +32,6 @@ class FileMatchRepository extends MatchRepositoryAbstract
     }
 
     /**
-     * @param Match $match
      * @throws \Transformer\Encoder\Exception
      */
     public function save(Match $match): void
