@@ -27,10 +27,6 @@ class GameFactory
     protected $metrics;
 
     /**
-     * @param RulesLoader $rulesLoader
-     * @param MatchRepositoryManager $matchRepositoryManager
-     * @param LockFactory $locker
-     * @param Metrics $metrics
      * @throws Repository\Exception
      */
     public function __construct(
@@ -39,10 +35,10 @@ class GameFactory
         LockFactory $locker,
         Metrics $metrics
     ) {
-        $this->rulesLoader = $rulesLoader;
-        $this->matchRepository     = $matchRepositoryManager->getRepository();
-        $this->locker      = $locker;
-        $this->metrics     = $metrics;
+        $this->rulesLoader     = $rulesLoader;
+        $this->matchRepository = $matchRepositoryManager->getRepository();
+        $this->locker          = $locker;
+        $this->metrics         = $metrics;
     }
 
     /**

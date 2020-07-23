@@ -35,9 +35,9 @@ class Game
         ?Match $match
     ) {
         $this->matchRepository = $matchRepository;
-        $this->locker  = $locker;
-        $this->metrics = $metrics;
-        $this->match   = $match;
+        $this->locker          = $locker;
+        $this->metrics         = $metrics;
+        $this->match           = $match;
 
         if ($this->match !== null) {
             $this->matchLock = $this->locker->createLock($this->match->id, (float)static::LOCK_MATCH_TTL);
