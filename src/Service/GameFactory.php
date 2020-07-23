@@ -25,8 +25,12 @@ class GameFactory
     /** @var Metrics */
     protected $metrics;
 
-    public function __construct(RulesLoader $rulesLoader, StorageInterface $storage, LockFactory $locker, Metrics $metrics)
-    {
+    public function __construct(
+        RulesLoader $rulesLoader,
+        StorageInterface $storage,
+        LockFactory $locker,
+        Metrics $metrics
+    ) {
         $this->rulesLoader = $rulesLoader;
         $this->storage     = $storage;
         $this->locker      = $locker;
@@ -95,8 +99,9 @@ class GameFactory
             $result,
             MetricsNames::GAME_GET_OK,
             MetricsNames::GAME_GET_PROBLEM,
-            MetricsNames::GAME_GET_ERROR)
-        );
+            MetricsNames::GAME_GET_ERROR
+        ));
+
         return $result;
     }
 }

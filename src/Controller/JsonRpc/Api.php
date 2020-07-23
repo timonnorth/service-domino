@@ -81,14 +81,17 @@ class Api implements Evaluator
             }
         } catch (\Datto\JsonRpc\Exceptions\Exception $e) {
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_REQUEST_ERROR);
+
             throw $e;
         } catch (\Exception $e) {
             //@todo Log.
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_EXCEPTION);
+
             throw new ServerErrorException();
         } catch (\Error $e) {
             //@todo Log.
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERVER_ERROR);
+
             throw new ServerErrorException();
         }
 
@@ -98,14 +101,19 @@ class Api implements Evaluator
         } catch (\Exception $e) {
             //@todo Log Serializing.
             $this->container->get('Metrics')->counter(MetricsNames::JSON_API_SERIALIZING_ERROR);
+
             throw new ServerErrorException();
         }
+
         return $result;
     }
 
     protected function rules(): Arrayable
     {
-        return ArrayList::create($this->container->get('RulesLoader')->getAllRulesNames());
+        $res = ArrayList::create($this->container->get('RulesLoader')->getAllRulesNames());
+        $this->container->get('Metrics')->counter(MetricsNames::JSON_API_LOAD_RULES);
+
+        return $res;
     }
 
     /**

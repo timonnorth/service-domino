@@ -18,5 +18,5 @@ return [
     'Json'        => \DI\create(\Transformer\Encoder\Json::class),
     'RulesLoader' => \DI\create(\Service\RulesLoader::class)
         ->constructor(\DI\get('Json')),
-    'Metrics' => \DI\create(\Infrastructure\Metrics\Metrics::class)
+    'Metrics' => \DI\create(\Infrastructure\Metrics\Metrics::class),
 ];

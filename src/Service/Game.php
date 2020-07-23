@@ -19,7 +19,8 @@ use ValueObject\Tile;
 
 class Game
 {
-    use GameTrait, MetricsTrait;
+    use GameTrait;
+    use MetricsTrait;
 
     protected const LOCK_MATCH_TTL = 10;
 
@@ -127,8 +128,9 @@ class Game
             $result,
             MetricsNames::GAME_REGISTER_PLAYER_OK,
             MetricsNames::GAME_REGISTER_PLAYER_PROBLEM,
-            MetricsNames::GAME_REGISTER_PLAYER_ERROR)
-        );
+            MetricsNames::GAME_REGISTER_PLAYER_ERROR
+        ));
+
         return $result;
     }
 
@@ -178,8 +180,9 @@ class Game
             $result,
             MetricsNames::GAME_PLAY_OK,
             MetricsNames::GAME_PLAY_PROBLEM,
-            MetricsNames::GAME_PLAY_ERROR)
-        );
+            MetricsNames::GAME_PLAY_ERROR
+        ));
+
         return $result;
     }
 

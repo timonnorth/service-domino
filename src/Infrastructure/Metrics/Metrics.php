@@ -9,7 +9,6 @@ namespace Infrastructure\Metrics;
  * Should implement or use some Metrics Engine, like Prometheus.
  *
  * @todo Implement engine.
- * @package Infrastructure\Metrics
  */
 class Metrics
 {
