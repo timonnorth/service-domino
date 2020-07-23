@@ -46,7 +46,7 @@ class GameTest extends TestCase
         self::assertTrue($match->players[0]->secret != '');
         self::assertTrue($match->players[0]->marker);
         self::assertEquals(0, count($match->players[0]->tiles));
-        self::assertTrue($match->players[1]->id == '');
+        self::assertEquals('', $match->players[1]->id);
 
         self::assertEquals(28, $match->stock->count());
 
