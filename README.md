@@ -12,8 +12,8 @@
  * **Logging and Metrics**: logging is not implemented (is @todo) because usually it will be either Monolog or some own complex solution (what is preferable). Example of metrics with counters and gauges presents.
  * **Transformers and Hydrators**: simple (arrayable) Resources what can be reused in other protocols (like jsonApi etc). Projects does not have hydrators because client's data is not complex and can be easy decoded/validated with jsonrpc engine. For other protocols some hydrators can be implemented. Project also has own "Serializer" what helps encode/decode entities for storing in some repository.  
  * **Api**: for now I implemented only JSONRPC (main reason - speed of developing), potentially projects can have different endpoints for protocols (see Transformers).
- * Api endpoints: [php-client](#jsonrpc-endpoints)
- * **Client**: as it's not very comfortable to play via Postman or other jsonrpc client (but is absolutely possible!) I created very simple [php-client](#client) to play in console mode. It does not have tests and code styling (just large spaghetti in one file) because I do not consider it as part on this assignment, please do not judge it ^_^. It uses plain-php and jsonrpc-client lib. Otherwise it shows how easy is to create client-app when you have good api.
+ * [Api endpoints](#jsonrpc-endpoints)
+ * **Client**: as it's not very comfortable to play via Postman or other jsonrpc client (but is absolutely possible!) I created very simple [php-client](#client) to play in console mode. It does not have tests and code styling (just large spaghetti in one file) because I do not consider it as part of this assignment, please do not judge it ^_^. It uses plain-php and jsonrpc-client lib. Otherwise it shows how easy is to create client-app when you have good api.
 
 ## Libraries
 
@@ -105,17 +105,17 @@ If you have PHP installed on your host (>=7.1) you can start client locally:
     "jsonrpc": "2.0",
     "id": "test",
     "result": {
-        "id": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
-        "createdAt": 1595525983,
+        "id": "76472357-ba00-4619-918f-4cfe20a55ecd",
+        "createdAt": 1595526906,
         "status": "new",
         "player": {
-            "id": "e54b6f84-b76c-48b7-8c06-26e8645a5e8e",
+            "id": "379df6fd-6229-48d2-92b2-b476eb1f3cb5",
             "name": "John Smith",
             "marker": true,
             "tiles": {
                 "count": 0
             },
-            "secret": "dec6fcd8-d4ea-4401-a608-b61f820afc00"
+            "secret": "260d4c02-4680-41a5-a15b-3b5fd32a4285"
         }
     }
 }
@@ -130,7 +130,7 @@ If you have PHP installed on your host (>=7.1) you can start client locally:
     "id": "test",
     "method": "register-player",
     "params": {
-        "gameId": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
+        "gameId": "76472357-ba00-4619-918f-4cfe20a55ecd",
         "name": "Bobby Smart"
     }
 }
@@ -141,31 +141,133 @@ If you have PHP installed on your host (>=7.1) you can start client locally:
     "jsonrpc": "2.0",
     "id": "test",
     "result": {
-        "id": "11f41d59-24e8-47f4-8d1b-d72e0259e104",
-        "createdAt": 1595525983,
+        "id": "76472357-ba00-4619-918f-4cfe20a55ecd",
+        "createdAt": 1595526906,
         "status": "play",
         "player": {
-            "id": "170553a6-9aa1-495d-b887-a71c1b7c205f",
+            "id": "f4653965-9f91-4516-9948-d9adfbc43b4e",
             "name": "Bobby Smart",
-            "marker": true,
+            "marker": false,
             "tiles": {
-                "count": 7
+                "count": 6
             },
-            "secret": "4a0201a5-315e-4856-8f09-ad184806e4c4"
+            "secret": "ed80a229-a906-4e1a-84eb-89d0153663b6"
         }
     }
 }
 ```
 
-    
-    
+4. Get Match.
 
-
-
+    Request:
 ```json
-
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "method": "get-match",
+    "params": {
+        "gameId": "76472357-ba00-4619-918f-4cfe20a55ecd",
+        "playerId": "379df6fd-6229-48d2-92b2-b476eb1f3cb5",
+        "playerSecret": "260d4c02-4680-41a5-a15b-3b5fd32a4285"
+    }
+}
 ```
- 
+   Response:  
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "test",
+    "result": {
+        "id": "76472357-ba00-4619-918f-4cfe20a55ecd",
+        "lastUpdatedHash": "35aa5931-a326-430b-bfa2-0365dd87591f",
+        "createdAt": 1595526906,
+        "rules": "traditional",
+        "status": "play",
+        "players": [
+            {
+                "id": "379df6fd-6229-48d2-92b2-b476eb1f3cb5",
+                "name": "John Smith",
+                "marker": true,
+                "tiles": {
+                    "count": 5,
+                    "list": [
+                        "0:3",
+                        "2:6",
+                        "2:5",
+                        "0:4",
+                        "0:1"
+                    ]
+                }
+            },
+            {
+                "id": "f4653965-9f91-4516-9948-d9adfbc43b4e",
+                "name": "Bobby Smart",
+                "marker": false,
+                "tiles": {
+                    "count": 4
+                }
+            }
+        ],
+        "stock": {
+            "tiles": {
+                "count": 14
+            }
+        },
+        "events": [
+            {
+                "type": "play",
+                "createdAt": 1595526943,
+                "playerId": "f4653965-9f91-4516-9948-d9adfbc43b4e",
+                "data": {
+                    "tile": "4:4",
+                    "position": "root",
+                    "parent": null
+                }
+            },
+            {
+                "type": "play",
+                "createdAt": 1595527272,
+                "playerId": "379df6fd-6229-48d2-92b2-b476eb1f3cb5",
+                "data": {
+                    "tile": "4:3",
+                    "position": "right",
+                    "parent": "4:4"
+                }
+            },
+            {
+                "type": "play",
+                "createdAt": 1595527282,
+                "playerId": "f4653965-9f91-4516-9948-d9adfbc43b4e",
+                "data": {
+                    "tile": "6:4",
+                    "position": "left",
+                    "parent": "4:4"
+                }
+            },
+            {
+                "type": "play",
+                "createdAt": 1595527300,
+                "playerId": "379df6fd-6229-48d2-92b2-b476eb1f3cb5",
+                "data": {
+                    "tile": "3:5",
+                    "position": "right",
+                    "parent": "4:3"
+                }
+            },
+            {
+                "type": "play",
+                "createdAt": 1595527312,
+                "playerId": "f4653965-9f91-4516-9948-d9adfbc43b4e",
+                "data": {
+                    "tile": "5:6",
+                    "position": "right",
+                    "parent": "3:5"
+                }
+            }
+        ]
+    }
+}
+```
 
 ## Credits
 
