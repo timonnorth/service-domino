@@ -1,10 +1,10 @@
 {
-    "name": "oitimon/domino",
+    "name": "timonnorth/service-domino",
     "type": "library",
     "description": "Domino API server",
     "keywords": [
-        "oitimon",
-        "domino"
+        "timonnorth",
+        "service-domino"
     ],
     "homepage": "https://github.com/oitimon/domino",
     "license": "MIT",
