@@ -1,0 +1,6 @@
+{
+  "family": "kozel",
+  "count_max_players": 4,
+  "count_tiles_when_start": 7,
+  "is_first_move_random": false
+}

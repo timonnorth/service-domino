@@ -1,3 +1,12 @@
 
 build/
 vendor/
+docker-compose.override.yml
+psr12.sh
+test.sh
+update.sh
+.php_cs.cache
+build.sh
+fix.sh
+tests/tmp/filestorage/
+/var/tmp

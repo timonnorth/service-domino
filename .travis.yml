@@ -15,7 +15,7 @@ jobs:
       script:
         - composer install --optimize-autoloader
         - composer test
-        - php travis/coverage-checker.php build/logs/clover.xml 80
+        - php travis/coverage-checker.php build/logs/clover.xml 75
     - stage: build
       name: "Build"
       language: generic
