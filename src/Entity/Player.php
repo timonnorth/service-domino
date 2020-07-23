@@ -57,7 +57,7 @@ class Player
     /**
      * Set marker to given player. Check and remove from another players.
      */
-    public function setMarker(array &$existPlayers = []): Player
+    public function setMarker(array $existPlayers = []): Player
     {
         foreach ($existPlayers as $existPlayer) {
             $existPlayer->marker = false;

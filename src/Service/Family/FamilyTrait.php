@@ -13,10 +13,10 @@ trait FamilyTrait
 {
     public function getRandomPlayer(array $players): Player
     {
-        return $players[rand(0, count($players) - 1)];
+        return $players[random_int(0, count($players) - 1)];
     }
 
-    public function addFirstPlayEvent(Match &$match, Tile $tile, string $playerId)
+    public function addFirstPlayEvent(Match $match, Tile $tile, string $playerId)
     {
         $match->addPlayEvent(
             DataPlay::create($tile->setRandOrientation(), null, DataPlay::POSITION_ROOT),

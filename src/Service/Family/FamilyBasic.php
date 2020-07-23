@@ -26,10 +26,8 @@ class FamilyBasic implements FamilyInterface
     /**
      * First Tile is always from Stock.
      * Marker to first Player or random.
-     *
-     * @param Match &$match
      */
-    public function firstStep(Rules $rules, Match &$match): Tile
+    public function firstStep(Rules $rules, Match $match): Tile
     {
         $tile           = $match->stock->tiles->pop()[0];
         $player         = $rules->isFirstMoveRandom ? $this->getRandomPlayer($match->players) : $match->players[0];

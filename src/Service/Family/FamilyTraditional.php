@@ -22,10 +22,8 @@ class FamilyTraditional implements FamilyInterface
     /**
      * First prio <1:1>, than upper to <6:6>. Tile <0:0> ("naked Vasili") does not play.
      * If nobody has double, smallest Tile plays.
-     *
-     * @param Match &$match
      */
-    public function firstStep(Rules $rules, Match &$match): Tile
+    public function firstStep(Rules $rules, Match $match): Tile
     {
         if ($rules->isFirstMoveRandom) {
             $player = $this->getRandomPlayer($match->players);
