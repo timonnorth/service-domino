@@ -26,6 +26,20 @@ class ApiTest extends TestCase
         self::assertEquals('Tiesto', $res['player']['name']);
 
         $api->evaluate("get-match", ['gameId' => $res['id'], 'playerId' => $res['player']['id'], 'playerSecret' => $res['player']['secret']]);
+
+        $res = $api->evaluate("register-player", ['gameId' => $res['id'], 'name' => 'Bob']);
+        self::assertEquals("Bob", $res['player']['name']);
+
+        $this->expectException(ArgumentException::class);
+        $this->expectExceptionMessage('Tile is not valid, should be in format from "0:0" to "6:6"');
+        $api->evaluate("play", ['gameId' => $res['id'], 'playerId' => $res['player']['id'], 'playerSecret' => $res['player']['secret'], 'tile' => '7:7', 'position' => 'right']);
+    }
+
+    public function testRegisterMatchValidation()
+    {
+        $this->expectException(ArgumentException::class);
+        $this->expectExceptionMessage('Match not found');
+        (new Api($this->getContainer()))->evaluate("register-player", ['gameId' => 'asd', 'name' => 'Bob']);
     }
 
     public function testGetRules()
