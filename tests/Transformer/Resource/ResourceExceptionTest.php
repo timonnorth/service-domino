@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Transformer\Serializer;
+namespace Tests\Transformer\Resource;
 
 use Transformer\Resource\ResourceException;
 
