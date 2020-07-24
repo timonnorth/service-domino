@@ -28,8 +28,9 @@
         "symfony/lock": "^5.1"
     },
     "require-dev": {
+        "m6web/redis-mock": "^5.0",
         "mollie/php-coding-standards": "^1.2",
-        "phpunit/phpunit" : "^9.0",
+        "phpunit/phpunit": "^9.0",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
