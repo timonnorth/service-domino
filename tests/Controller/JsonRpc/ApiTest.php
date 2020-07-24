@@ -25,10 +25,10 @@ class ApiTest extends TestCase
         self::assertTrue($res['id'] != '');
         self::assertEquals('Tiesto', $res['player']['name']);
 
-        $api->evaluate("get-match", ['gameId' => $res['id'], 'playerId' => $res['player']['id'], 'playerSecret' => $res['player']['secret']]);
-
         $res = $api->evaluate("register-player", ['gameId' => $res['id'], 'name' => 'Bob']);
         self::assertEquals("Bob", $res['player']['name']);
+
+        $api->evaluate("get-match", ['gameId' => $res['id'], 'playerId' => $res['player']['id'], 'playerSecret' => $res['player']['secret']]);
 
         $this->expectException(ArgumentException::class);
         $this->expectExceptionMessage('Tile is not valid, should be in format from "0:0" to "6:6"');
